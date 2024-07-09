@@ -4,7 +4,6 @@ import { connect, set } from 'mongoose'
 import { dbConnection } from './database/index.js'
 import { CREDENTIALS, ORIGIN } from './config/index.js'
 import cookieParser from 'cookie-parser'
-import { Routes } from './interfaces/auth.interface.js'
 import AuthRoute from './routes/auth.route.js'
 class App {
     public app: express.Application
