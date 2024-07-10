@@ -1,4 +1,4 @@
-import { ICreateUser, IUser } from "../interfaces/user.interface.ts";
+import { ICreateUser, IUser } from "../interfaces/user-interface.ts";
 import User from "../models/user.model.ts";
 // import bcrypt from "bcryptjs"
 

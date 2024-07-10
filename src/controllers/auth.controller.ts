@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { ICreateUser, IUser } from "../interfaces/user.interface.ts";
+import { ICreateUser, IUser } from "../interfaces/user-interface.ts";
 import AuthRepository from "../repositories/auth.repository.ts";
 
 class AuthController{
