@@ -4,6 +4,7 @@ import { connect, set } from 'mongoose'
 import { dbConnection } from './database/index.ts'
 import { ORIGIN, CREDENTIALS } from './config/index.ts'
 import AuthRoute from './routes/auth.route.ts'
+import ErrorHandling from './error/index.ts'
 class App {
     public app: express.Application
     public env: string
@@ -38,10 +39,11 @@ class App {
     private initializeMiddlewares() {
         this.app.use(cors({ origin: ORIGIN, credentials: CREDENTIALS }))
         this.app.use(express.json())
+        this.app.use(ErrorHandling)
     }
 
     private initializeRoutes() {
-        this.app.use('/', new AuthRoute().router)
+        this.app.use('/api', new AuthRoute().router)
     }
 }
 
