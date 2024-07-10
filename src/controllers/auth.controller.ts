@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { ICreateUser, IUser } from "../interfaces/user.interface.js";
-import AuthRepository from "../repositories/auth.repository.js";
+import { ICreateUser, IUser } from "../interfaces/user.interface.ts";
+import AuthRepository from "../repositories/auth.repository.ts";
 
 class AuthController{
     public auth_repository = new AuthRepository()
