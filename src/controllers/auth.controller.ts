@@ -48,6 +48,20 @@ class AuthController {
       next(error);
     }
   };
+
+  public logout = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const authHeader = req.headers["authorization"];
+      if (!authHeader) return res.status(204);
+      const token = authHeader.split(" ")[1];
+      const SECRET_KEY = process.env.SECRET_KEY || "SECRET_KEY";
+
+      res.setHeader("Clear-Site-Data", "authorization");
+      res.status(200).json({ message: "You are logged out" });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default AuthController;
