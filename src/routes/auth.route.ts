@@ -2,6 +2,8 @@ import { Router } from "express";
 import { Routes } from "../interfaces/auth.interface.ts";
 import AuthController from "../controllers/auth.controller.ts";
 import { ValidateUserLogin, ValidateUserRegister } from "../validators/auth.validator.ts";
+import { validate_token } from "../middleware/index.ts";
+import { IRequest } from "../interfaces/request.interface.ts";
 
 class AuthRoute implements Routes {
   public router = Router();

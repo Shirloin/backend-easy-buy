@@ -5,10 +5,11 @@ import UserRepository from "../repositories/user.repository.ts";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { SECRET_KEY } from "../config/index.ts";
+import { IRequest } from "../interfaces/request.interface.ts";
 
 class AuthController {
   public auth_repository = new AuthRepository();
-  public user_repository = new UserRepository();
+  public user_repository = UserRepository.getInstance();
 
   public register = async (req: Request, res: Response, next: NextFunction) => {
     try {
