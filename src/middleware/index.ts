@@ -15,6 +15,7 @@ export async function validate_token(req: IRequest, res: Response, next: NextFun
             const id = user.id
             const user_repository = UserRepository.getInstance()
             const validateUser = await user_repository.getUserById(id)
+            console.log(validateUser)
             if(validateUser!=null){
                 req.user = user
             }

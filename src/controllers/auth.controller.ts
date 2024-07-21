@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { CookieOptions, NextFunction, Request, Response } from "express";
 import { ICreateUser, IUser } from "../interfaces/user.interface.ts";
 import AuthRepository from "../repositories/auth.repository.ts";
 import UserRepository from "../repositories/user.repository.ts";
@@ -34,6 +34,12 @@ class AuthController {
       if (!isValid) {
         return res.status(401).send({ message: "Wrong password" });
       }
+      const options: CookieOptions = {
+        maxAge: 20*60 * 1000,
+        httpOnly: true,
+        secure: true,
+        sameSite: "none"
+      }
       var token = jwt.sign(
         {
           id: user._id,
@@ -41,6 +47,7 @@ class AuthController {
         SECRET_KEY || "SECRET_KEY",
         { expiresIn: 86400 }
       );
+      res.cookie("authorization", token, options)
       res
         .status(200)
         .json({ user: user, message: "Login successfull", token: token });
