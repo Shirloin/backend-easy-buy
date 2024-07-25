@@ -7,13 +7,10 @@ class ShopController {
   public user_repository = UserRepository.getInstance();
   public getShop = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // console.log(req);
-      // const user = req.session.user;
-      // if (!user) {
-      //   return res.status(401).send({ message: "Unauthorized" });
-      // }
-      // const shop = await this.user_repository.getShop(user._id);
-      // res.status(200).json({ shop });
+      const { user_id } = req.params;
+      console.log(user_id);
+      const shop = await this.user_repository.getShop(user_id);
+      res.status(200).json({ shop });
     } catch (error) {
       next(error);
     }

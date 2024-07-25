@@ -46,7 +46,6 @@ class AuthController {
         SECRET_KEY || "SECRET_KEY",
         { expiresIn: 86400 }
       );
-      req.session.user = user;
       res.status(200).json({
         user: user,
         message: "Login successfull",
