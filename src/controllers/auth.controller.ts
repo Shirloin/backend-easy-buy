@@ -5,7 +5,6 @@ import UserRepository from "../repositories/user.repository.ts";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { SECRET_KEY } from "../config/index.ts";
-import { IRequest } from "../interfaces/request.interface.ts";
 
 class AuthController {
   public auth_repository = new AuthRepository();
@@ -35,11 +34,11 @@ class AuthController {
         return res.status(401).send({ message: "Wrong password" });
       }
       const options: CookieOptions = {
-        maxAge: 20*60 * 1000,
+        maxAge: 20 * 60 * 1000,
         httpOnly: true,
         secure: true,
-        sameSite: "none"
-      }
+        sameSite: "none",
+      };
       var token = jwt.sign(
         {
           id: user._id,
@@ -47,10 +46,13 @@ class AuthController {
         SECRET_KEY || "SECRET_KEY",
         { expiresIn: 86400 }
       );
-      res.cookie("authorization", token, options)
-      res
-        .status(200)
-        .json({ user: user, message: "Login successfull", token: token });
+      req.session.user = user;
+      res.status(200).json({
+        user: user,
+        message: "Login successfull",
+        token: token,
+        session: req.session,
+      });
     } catch (error) {
       next(error);
     }
@@ -69,6 +71,11 @@ class AuthController {
       next(error);
     }
   };
+  public validate_token = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {};
 }
 
 export default AuthController;

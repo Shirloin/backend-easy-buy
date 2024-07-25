@@ -1,51 +1,62 @@
-import express from 'express'
-import cors from 'cors'
-import { connect, set } from 'mongoose'
-import { dbConnection } from './database/index.ts'
-import { ORIGIN, CREDENTIALS } from './config/index.ts'
-import AuthRoute from './routes/auth.route.ts'
-import ErrorHandling from './error/index.ts'
+import express from "express";
+import cors from "cors";
+import { connect, set } from "mongoose";
+import { dbConnection } from "./database/index.ts";
+import { ORIGIN, CREDENTIALS, SECRET_KEY } from "./config/index.ts";
+import AuthRoute from "./routes/auth.route.ts";
+import ErrorHandling from "./error/index.ts";
+import ShopRoute from "./routes/shop.route.ts";
+import session from "express-session";
 class App {
-    public app: express.Application
-    public env: string
-    public port: string | number
+  public app: express.Application;
+  public env: string;
+  public port: string | number;
 
-    constructor() {
-        this.app = express()
-        this.env = 'development'
-        this.port = 3000
+  constructor() {
+    this.app = express();
+    this.env = "development";
+    this.port = 3000;
 
-        this.connectToDatabase()
-        this.initializeMiddlewares()
-        this.initializeRoutes()
+    this.connectToDatabase();
+    this.initializeMiddlewares();
+    this.initializeRoutes();
+  }
+
+  public listen() {
+    this.app.listen(this.port, () => {
+      console.info(`=================================`);
+      console.info(`======= ENV: ${this.env} =======`);
+      console.info(`🚀 App listening on the port ${this.port}`);
+      console.info(`=================================`);
+    });
+  }
+
+  private async connectToDatabase() {
+    if (this.env !== "production") {
+      set("debug", true);
     }
+    await connect(dbConnection.url);
+  }
 
-    public listen() {
-        this.app.listen(this.port, () => {
-            console.info(`=================================`);
-            console.info(`======= ENV: ${this.env} =======`);
-            console.info(`🚀 App listening on the port ${this.port}`);
-            console.info(`=================================`);
-        });
-    }
+  private initializeMiddlewares() {
+    this.app.use(
+      session({
+        secret: SECRET_KEY || "SECRET_KEY",
+        resave: false,
+        saveUninitialized: false,
+        cookie: { secure: false },
+      })
+    );
+    this.app.use(cors({ origin: ORIGIN, credentials: CREDENTIALS }));
+    this.app.use(express.json());
+    this.app.use(ErrorHandling);
+  }
 
-    private async connectToDatabase() {
-        if (this.env !== 'production') {
-            set('debug', true)
-        }
-        await connect(dbConnection.url)
-    }
-
-    private initializeMiddlewares() {
-        this.app.use(cors({ origin: ORIGIN, credentials: CREDENTIALS }))
-        this.app.use(express.json())
-        this.app.use(ErrorHandling)
-    }
-
-    private initializeRoutes() {
-        this.app.use('/api', new AuthRoute().router)
-    }
+  private initializeRoutes() {
+    this.app.use("/api", new AuthRoute().router);
+    this.app.use("/api", new ShopRoute().router);
+  }
 }
 
-const app = new App()
-app.listen()
+const app = new App();
+app.listen();
