@@ -44,17 +44,22 @@ class App {
         secret: SECRET_KEY || "SECRET_KEY",
         resave: false,
         saveUninitialized: false,
-        cookie: { secure: false },
+        cookie: {
+          maxAge: 20 * 60 * 1000,
+          secure: this.env === "production",
+          httpOnly: true,
+          sameSite: "lax",
+        },
       })
     );
     this.app.use(cors({ origin: ORIGIN, credentials: CREDENTIALS }));
     this.app.use(express.json());
-    this.app.use(ErrorHandling);
   }
 
   private initializeRoutes() {
     this.app.use("/api", new AuthRoute().router);
     this.app.use("/api", new ShopRoute().router);
+    this.app.use(ErrorHandling);
   }
 }
 

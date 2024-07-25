@@ -5,12 +5,22 @@ import UserRepository from "../repositories/user.repository";
 class ShopController {
   public shop_repository = ShopRepository.getInstance();
   public user_repository = UserRepository.getInstance();
+
+  public createShop = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+    } catch (error) {}
+  };
+
   public getShop = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { user_id } = req.params;
-      console.log(user_id);
-      const shop = await this.user_repository.getShop(user_id);
-      res.status(200).json({ shop });
+      const user = (req.session as any).user;
+      console.log(user);
+      const shop = await this.user_repository.getShop(user._id);
+      res.status(200).json({ shop: shop });
     } catch (error) {
       next(error);
     }
