@@ -24,11 +24,13 @@ export async function validate_token(
       const validateUser = await user_repository.getUserById(id);
       if (validateUser != null) {
         (req.session as any).user = validateUser;
+        console.log("middleware: ", (req.session as any).user);
+        next();
       } else {
         return res.sendStatus(403);
       }
-      next();
     });
+  } else {
+    return res.sendStatus(401);
   }
-  next();
 }

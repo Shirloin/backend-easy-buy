@@ -1,3 +1,4 @@
+import { IShop } from "../interfaces/shop.interface";
 import { IUser } from "../interfaces/user.interface";
 import User from "../models/user.model";
 
