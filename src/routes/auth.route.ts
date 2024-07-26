@@ -5,6 +5,7 @@ import {
   ValidateUserLogin,
   ValidateUserRegister,
 } from "../validators/auth.validator.ts";
+import { validate_token } from "../middleware/index.ts";
 
 class AuthRoute implements Routes {
   public router = Router();
@@ -22,6 +23,7 @@ class AuthRoute implements Routes {
     );
     this.router.post("/login", ValidateUserLogin, this.auth_controller.login);
     this.router.get("/logout", this.auth_controller.logout);
+    this.router.get("/validate_token", this.auth_controller.validate_token);
   }
 }
 

@@ -24,10 +24,10 @@ export async function validate_token(
       const validateUser = await user_repository.getUserById(id);
       if (validateUser != null) {
         (req.session as any).user = validateUser;
-        return next();
       } else {
         return res.sendStatus(403);
       }
+      next();
     });
   }
   next();
