@@ -1,3 +1,4 @@
+import { ICreateShop, IShop } from "../interfaces/shop.interface";
 import Shop from "../models/shop.model";
 import User from "../models/user.model";
 
@@ -18,6 +19,13 @@ class ShopRepository {
       ShopRepository.instance = new ShopRepository();
     }
     return ShopRepository.instance;
+  }
+
+  public async createShop(shopData: ICreateShop): Promise<IShop> {
+    const newShop: IShop = await this.shop.create({
+      ...shopData,
+    });
+    return newShop;
   }
 }
 export default ShopRepository;

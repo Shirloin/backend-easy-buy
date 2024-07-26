@@ -10,7 +10,8 @@ class ShopRoute implements Routes {
     this.initializeRoutes();
   }
   private initializeRoutes() {
-    this.router.get("/shop", validate_token, this.shop_controller.getShop);
+    this.router.get("/shop", validate_token, this.shop_controller.getUserShop);
+    this.router.post("/shop", validate_token, this.shop_controller.createShop);
   }
 }
 export default ShopRoute;
