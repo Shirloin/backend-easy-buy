@@ -21,7 +21,9 @@ class UserRepository {
   }
 
   public async getUserByUsername(username: String) {
-    const user = await this.user.findOne({ username: username });
+    const user = await this.user
+      .findOne({ username: username })
+      .populate("shop");
     return user;
   }
   public async getUserByEmail(email: String) {
@@ -32,11 +34,6 @@ class UserRepository {
   public async getUserById(id: string) {
     const user = await this.user.findById(id);
     return user;
-  }
-
-  public async getShop(id: string) {
-    const user = await this.user.findById(id).populate("shop");
-    return user?.shop;
   }
 }
 

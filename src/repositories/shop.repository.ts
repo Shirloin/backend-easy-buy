@@ -21,6 +21,11 @@ class ShopRepository {
     return ShopRepository.instance;
   }
 
+  public async getUserShop(user_id: string) {
+    const user = await this.user.findById(user_id).populate("shop");
+    return user?.shop;
+  }
+
   public async createShop(shopData: ICreateShop): Promise<IShop> {
     const newShop: IShop = await this.shop.create({
       ...shopData,

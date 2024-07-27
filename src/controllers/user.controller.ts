@@ -6,7 +6,6 @@ class UserController {
   public getShop = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const user = req.session.user;
-      console.log(user);
     } catch (error) {}
   };
 }

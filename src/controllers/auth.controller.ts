@@ -85,7 +85,6 @@ class AuthController {
 
           jwt.verify(token, SECRET_KEY, async (err: any, payload: any) => {
             if (err) {
-              console.log(err);
               return res.sendStatus(403);
             }
             const id = payload.id;
@@ -101,7 +100,6 @@ class AuthController {
         }
       }
     } catch (error) {
-      console.log(error);
       next(error);
     }
   };
