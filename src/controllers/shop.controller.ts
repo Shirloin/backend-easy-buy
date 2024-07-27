@@ -15,7 +15,6 @@ class ShopController {
   ) => {
     try {
       const user = (req.session as any).user;
-      console.log(user);
       const shop = await this.user_repository.getShop(user._id);
       res.status(200).json({ shop: shop });
     } catch (error) {
@@ -38,8 +37,10 @@ class ShopController {
       const user_id = user._id;
       const shopData: ICreateShop = { ...req.body, user_id };
       const shop: IShop = await this.shop_repository.createShop(shopData);
+      console.log(shop);
       user.shop = shop;
       await user.save();
+      console.log(user);
       return res
         .status(200)
         .json({ message: "Shop has been registered", shop: shop });
