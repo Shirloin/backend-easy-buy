@@ -7,6 +7,7 @@ import AuthRoute from "./routes/auth.route.ts";
 import ErrorHandling from "./error/index.ts";
 import ShopRoute from "./routes/shop.route.ts";
 import session from "express-session";
+import ProductRoute from "./routes/product.route.ts";
 class App {
   public app: express.Application;
   public env: string;
@@ -59,6 +60,7 @@ class App {
   private initializeRoutes() {
     this.app.use("/api", new AuthRoute().router);
     this.app.use("/api", new ShopRoute().router);
+    this.app.use("/api", new ProductRoute().router);
     this.app.use(ErrorHandling);
   }
 }

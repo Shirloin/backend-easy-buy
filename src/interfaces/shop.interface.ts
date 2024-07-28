@@ -1,3 +1,4 @@
+import { IProduct } from "./product.interface";
 import { IUser } from "./user.interface";
 
 export interface IShop {
@@ -7,6 +8,7 @@ export interface IShop {
   banner_url: string;
   image_url: string;
   user: IUser;
+  products: IProduct[];
 }
 
 export interface ICreateShop {

@@ -24,6 +24,12 @@ const shop_schema: Schema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  products: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
+    },
+  ],
 });
 
 const Shop = model<IShop & Document>("Shop", shop_schema);

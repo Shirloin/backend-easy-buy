@@ -32,5 +32,10 @@ class ShopRepository {
     });
     return newShop;
   }
+
+  public async getShopById(shopId: string) {
+    const shop = await this.shop.findById(shopId).populate("products");
+    return shop;
+  }
 }
 export default ShopRepository;

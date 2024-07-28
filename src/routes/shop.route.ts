@@ -5,13 +5,13 @@ import { authMiddleware } from "../middleware";
 
 class ShopRoute implements Routes {
   public router = Router();
-  public shop_controller = new ShopController();
+  public shopController = new ShopController();
   constructor() {
     this.initializeRoutes();
   }
   private initializeRoutes() {
-    this.router.get("/shop", authMiddleware, this.shop_controller.getUserShop);
-    this.router.post("/shop", authMiddleware, this.shop_controller.createShop);
+    this.router.get("/shop", authMiddleware, this.shopController.getUserShop);
+    this.router.post("/shop", authMiddleware, this.shopController.createShop);
   }
 }
 export default ShopRoute;

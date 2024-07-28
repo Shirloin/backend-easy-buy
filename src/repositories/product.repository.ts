@@ -39,26 +39,46 @@ export default class ProductRepository {
     productVariantData: ICreateProductVariant[],
     productImageData: ICreateProductImage[]
   ): Promise<IProduct> {
+    let category = await this.productCategory.findOne({
+      name: productData.category,
+    });
+    if (!category) {
+      category = await this.productCategory.create({
+        name: productData.category,
+      });
+    }
+
     const newProduct = await this.product.create({
       ...productData,
+      product_category: category._id,
     });
 
-    const newProductVariants: IProductVariant[] =
-      await this.productVariant.create(
+    let newProductVariants: IProductVariant[] = [];
+
+    if (productVariantData) {
+      newProductVariants = await this.productVariant.create(
         productVariantData.map((variant) => ({
           ...variant,
           product: newProduct._id,
         }))
       );
-    const newProductImages: IProductImage[] = await this.productImage.create(
-      productImageData.map((image) => ({
-        ...image,
-        product: newProduct._id,
-      }))
-    );
+    }
+
+    let newProductImages: IProductImage[] = [];
+    if (productImageData) {
+      newProductImages = await this.productImage.create(
+        productImageData.map((image) => ({
+          ...image,
+          product: newProduct._id,
+        }))
+      );
+    }
     newProduct.product_variants = newProductVariants;
     newProduct.product_images = newProductImages;
     await newProduct.save();
+
+    category.products.push(newProduct);
+    await category.save();
 
     return newProduct;
   }

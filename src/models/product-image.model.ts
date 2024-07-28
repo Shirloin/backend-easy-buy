@@ -14,7 +14,7 @@ const product_image_schema: Schema = new Schema({
 });
 
 const ProductImage = model<IProductImage & Document>(
-  "ProductVariant",
+  "ProductImage",
   product_image_schema
 );
 export default ProductImage;

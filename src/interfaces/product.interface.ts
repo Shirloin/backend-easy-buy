@@ -17,7 +17,5 @@ export interface ICreateProduct {
   name: string;
   description: string;
   category: string;
-  product_variants: IProductVariant[];
-  product_images: IProductImage[];
   shop: IShop;
 }
