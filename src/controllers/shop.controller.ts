@@ -14,7 +14,6 @@ class ShopController {
     next: NextFunction
   ) => {
     try {
-      console.log("check user shop");
       const user = (req.session as any).user;
       const shop = await this.shop_repository.getUserShop(user._id);
       res.status(200).json({ shop: shop });

@@ -76,32 +76,25 @@ class AuthController {
     res: Response,
     next: NextFunction
   ) => {
-    try {
-      const authHeader = req.headers["authorization"];
-      if (authHeader) {
-        const token = authHeader!.split(" ")[1];
-        if (token) {
-          const SECRET_KEY = process.env.SECRET_KEY || "SECRET_KEY";
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
 
-          jwt.verify(token, SECRET_KEY, async (err: any, payload: any) => {
-            if (err) {
-              return res.sendStatus(403);
-            }
-            const id = payload.id;
-            const validateUser = await this.user_repository.getUserById(id);
-            if (validateUser != null) {
-              return res.sendStatus(200);
-            } else {
-              return res.sendStatus(403);
-            }
-          });
-        } else {
-          return res.sendStatus(403);
-        }
-      }
-    } catch (error) {
-      next(error);
+    if (token == null) {
+      return res.sendStatus(401);
     }
+    jwt.verify(token, SECRET_KEY as string, async (err: any, payload: any) => {
+      if (err) return res.sendStatus(403);
+      const id = payload.id;
+      const user_repository = UserRepository.getInstance();
+      const validateUser = await user_repository.getUserById(id);
+      if (validateUser != null) {
+        (req.session as any).user = validateUser;
+        return res.sendStatus(200);
+      } else {
+        return res.sendStatus(403);
+      }
+      next();
+    });
   };
 }
 
