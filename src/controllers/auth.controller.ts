@@ -8,13 +8,13 @@ import { SECRET_KEY } from "../config/index.ts";
 import { validateHeaderName } from "http";
 
 class AuthController {
-  public auth_repository = new AuthRepository();
-  public user_repository = UserRepository.getInstance();
+  public authRepository = new AuthRepository();
+  public userRepository = UserRepository.getInstance();
 
   public register = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userData: ICreateUser = req.body;
-      const user: IUser = await this.auth_repository.register(userData);
+      const user: IUser = await this.authRepository.register(userData);
       res.status(200).send({ message: "User registered successfully" });
     } catch (error) {
       next(error);
@@ -24,7 +24,7 @@ class AuthController {
   public login = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { username, password } = req.body;
-      const user: IUser | null = await this.user_repository.getUserByUsername(
+      const user: IUser | null = await this.userRepository.getUserByUsername(
         username
       );
       if (!user) {
@@ -72,7 +72,7 @@ class AuthController {
       next(error);
     }
   };
-  public validate_token = async (
+  public validateToken = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -86,8 +86,7 @@ class AuthController {
     jwt.verify(token, SECRET_KEY as string, async (err: any, payload: any) => {
       if (err) return res.sendStatus(403);
       const id = payload.id;
-      const user_repository = UserRepository.getInstance();
-      const validateUser = await user_repository.getUserById(id);
+      const validateUser = await this.userRepository.getUserById(id);
       if (validateUser != null) {
         (req.session as any).user = validateUser;
         return res.status(200).json({ user: validateUser });

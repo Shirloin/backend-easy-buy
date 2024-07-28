@@ -5,8 +5,8 @@ import { ICreateShop, IShop } from "../interfaces/shop.interface";
 import { IUser } from "../interfaces/user.interface";
 
 class ShopController {
-  public shop_repository = ShopRepository.getInstance();
-  public user_repository = UserRepository.getInstance();
+  public shopRepository = ShopRepository.getInstance();
+  public userRepository = UserRepository.getInstance();
 
   public getUserShop = async (
     req: Request,
@@ -15,7 +15,7 @@ class ShopController {
   ) => {
     try {
       const user = (req.session as any).user;
-      const shop = await this.shop_repository.getUserShop(user._id);
+      const shop = await this.shopRepository.getUserShop(user._id);
       res.status(200).json({ shop: shop });
     } catch (error) {
       next(error);
@@ -29,14 +29,13 @@ class ShopController {
   ) => {
     try {
       const sessionUser = (req.session as any).user;
-      console.log(req.session as any);
-      const user = await this.user_repository.getUserById(sessionUser.id);
+      const user = await this.userRepository.getUserById(sessionUser.id);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      const user_id = user._id;
-      const shopData: ICreateShop = { ...req.body, user_id };
-      const shop: IShop = await this.shop_repository.createShop(shopData);
+      const userId = user._id;
+      const shopData: ICreateShop = { ...req.body, userId };
+      const shop: IShop = await this.shopRepository.createShop(shopData);
       user.shop = shop;
       await user.save();
       return res

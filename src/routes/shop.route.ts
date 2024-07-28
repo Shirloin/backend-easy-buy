@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { Routes } from "../interfaces/auth.interface";
 import ShopController from "../controllers/shop.controller";
-import { validate_token } from "../middleware";
+import { authMiddleware } from "../middleware";
 
 class ShopRoute implements Routes {
   public router = Router();
@@ -10,8 +10,8 @@ class ShopRoute implements Routes {
     this.initializeRoutes();
   }
   private initializeRoutes() {
-    this.router.get("/shop", validate_token, this.shop_controller.getUserShop);
-    this.router.post("/shop", validate_token, this.shop_controller.createShop);
+    this.router.get("/shop", authMiddleware, this.shop_controller.getUserShop);
+    this.router.post("/shop", authMiddleware, this.shop_controller.createShop);
   }
 }
 export default ShopRoute;

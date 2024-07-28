@@ -21,8 +21,8 @@ class ShopRepository {
     return ShopRepository.instance;
   }
 
-  public async getUserShop(user_id: string) {
-    const user = await this.user.findById(user_id).populate("shop");
+  public async getUserShop(userId: string) {
+    const user = await this.user.findById(userId).populate("shop");
     return user?.shop;
   }
 

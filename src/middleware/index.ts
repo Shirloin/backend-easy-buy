@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import UserRepository from "../repositories/user.repository";
 
-export async function validate_token(
+export async function authMiddleware(
   req: Request,
   res: Response,
   next: NextFunction
