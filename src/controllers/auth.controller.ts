@@ -5,6 +5,7 @@ import UserRepository from "../repositories/user.repository.ts";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { SECRET_KEY } from "../config/index.ts";
+import { validateHeaderName } from "http";
 
 class AuthController {
   public auth_repository = new AuthRepository();
@@ -89,7 +90,7 @@ class AuthController {
       const validateUser = await user_repository.getUserById(id);
       if (validateUser != null) {
         (req.session as any).user = validateUser;
-        return res.sendStatus(200);
+        return res.status(200).json({ user: validateUser });
       } else {
         return res.sendStatus(403);
       }

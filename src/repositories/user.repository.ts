@@ -32,7 +32,7 @@ class UserRepository {
   }
 
   public async getUserById(id: string) {
-    const user = await this.user.findById(id);
+    const user = await this.user.findById(id).populate("shop");
     return user;
   }
 }
