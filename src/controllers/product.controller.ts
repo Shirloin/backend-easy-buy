@@ -22,17 +22,11 @@ export default class ProductController {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      const { name, description, category, product_variants, product_images } =
-        req.body;
+      const { product, productVariants, productImages } = req.body;
 
-      const productData: ICreateProduct = {
-        name,
-        description,
-        category,
-        shop: user.shop,
-      };
-      const productVariantData: ICreateProductVariant[] = product_variants;
-      const productImageData: ICreateProductImage[] = product_images;
+      const productData: ICreateProduct = { ...product, shop: user.shop };
+      const productVariantData: ICreateProductVariant[] = productVariants;
+      const productImageData: ICreateProductImage[] = productImages;
 
       const newProduct = await this.productRepository.createProduct(
         productData,
