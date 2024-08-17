@@ -84,15 +84,12 @@ export default class ProductRepository {
   }
 
   public async getProductsByShop(shopId: string) {
-    return await this.shop.findById(shopId)
-      .populate({
-        path: 'products',
-        populate: [
-          { path: 'product_variants' },
-          { path: 'product_images' },
-          { path: 'product_category' }
-        ]
-      })
+    return await this.product.find({ shop: shopId })
+      .populate([
+        { path: 'product_variants' },
+        { path: 'product_images' },
+        { path: 'product_category' }
+      ])
       .exec();
   }
 }

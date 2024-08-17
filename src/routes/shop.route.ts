@@ -13,6 +13,7 @@ class ShopRoute implements Routes {
     this.router.get("/shop", authMiddleware, this.shopController.getUserShop);
     this.router.post("/shop", authMiddleware, this.shopController.createShop);
     this.router.get("/shop/:shopId/products", authMiddleware, this.shopController.getProductsByShop)
+    this.router.get("/shop/products", authMiddleware, this.shopController.getMyShopProduct)
   }
 }
 export default ShopRoute;

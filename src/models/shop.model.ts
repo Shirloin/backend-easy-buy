@@ -12,11 +12,11 @@ const shop_schema: Schema = new Schema({
     type: String,
     required: true,
   },
-  banner_url: {
+  bannerUrl: {
     type: String,
     required: true,
   },
-  image_url: {
+  imageUrl: {
     type: String,
     required: true,
   },

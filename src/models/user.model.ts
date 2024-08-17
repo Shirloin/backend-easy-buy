@@ -25,7 +25,7 @@ const user_schema: Schema = new Schema({
     type: String,
     required: false,
   },
-  image_url: {
+  imageUrl: {
     type: String,
     required: false,
     default:

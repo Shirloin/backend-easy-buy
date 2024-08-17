@@ -10,19 +10,19 @@ const product_schema: Schema = new Schema({
     type: String,
     required: true,
   },
-  product_variants: [
+  productVariants: [
     {
       type: Schema.Types.ObjectId,
       ref: "ProductVariant",
     },
   ],
-  product_images: [
+  productImages: [
     {
       type: Schema.Types.ObjectId,
       ref: "ProductImage",
     },
   ],
-  product_category: {
+  productCategory: {
     type: Schema.Types.ObjectId,
     ref: "ProductCategory",
   },
