@@ -30,6 +30,7 @@ class ShopController {
     next: NextFunction
   ) => {
     try {
+
       const sessionUser = (req.session as any).user;
       const user = await this.userRepository.getUserById(sessionUser.id);
       if (!user) {
@@ -44,6 +45,7 @@ class ShopController {
         .status(200)
         .json({ message: "Shop has been registered", shop: shop });
     } catch (error) {
+      console.log(error)
       next(error);
     }
   };
@@ -74,7 +76,6 @@ class ShopController {
   public getMyShopProduct = async (req: Request,
     res: Response,
     next: NextFunction) => {
-
     const sessionUser = (req.session as any).user;
     const user = await this.userRepository.getUserById(sessionUser.id);
     if (!user) {

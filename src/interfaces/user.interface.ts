@@ -7,7 +7,7 @@ export interface IUser {
   password: string;
   dob: Date;
   gender: string;
-  image_url: string;
+  imageUrl: string;
   phone: string;
   shop: IShop;
 }

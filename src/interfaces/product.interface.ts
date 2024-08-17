@@ -7,9 +7,9 @@ export interface IProduct {
   _id: string;
   name: string;
   description: string;
-  product_variants: IProductVariant[];
-  product_images: IProductImage[];
-  product_category: IProductCategory;
+  productVariants: IProductVariant[];
+  productImages: IProductImage[];
+  productCategory: IProductCategory;
   shop: IShop;
 }
 

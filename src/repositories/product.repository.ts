@@ -73,8 +73,8 @@ export default class ProductRepository {
         }))
       );
     }
-    newProduct.product_variants = newProductVariants;
-    newProduct.product_images = newProductImages;
+    newProduct.productVariants = newProductVariants;
+    newProduct.productImages = newProductImages;
     await newProduct.save();
 
     category.products.push(newProduct);
@@ -84,12 +84,13 @@ export default class ProductRepository {
   }
 
   public async getProductsByShop(shopId: string) {
-    return await this.product.find({ shop: shopId })
+    const products = await this.product.find({ shop: shopId })
       .populate([
-        { path: 'product_variants' },
-        { path: 'product_images' },
-        { path: 'product_category' }
+        { path: 'productVariants' },
+        { path: 'productImages' },
+        { path: 'productCategory' }
       ])
       .exec();
+    return products
   }
 }

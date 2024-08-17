@@ -3,7 +3,7 @@ import { IProductVariant } from "../interfaces/product-variant.interface";
 import { IProductImage } from "../interfaces/product-image.interface";
 
 const product_image_schema: Schema = new Schema({
-  image_url: {
+  imageUrl: {
     type: String,
     required: true,
   },

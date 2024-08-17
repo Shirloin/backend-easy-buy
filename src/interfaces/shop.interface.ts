@@ -5,8 +5,8 @@ export interface IShop {
   _id: string;
   name: string;
   description: string;
-  banner_url: string;
-  image_url: string;
+  bannerUrl: string;
+  imageUrl: string;
   user: IUser;
   products: IProduct[];
 }
@@ -14,7 +14,7 @@ export interface IShop {
 export interface ICreateShop {
   name: string;
   description: string;
-  banner_url: string;
-  image_url: string;
+  bannerUrl: string;
+  imageUrl: string;
   user: IUser;
 }
