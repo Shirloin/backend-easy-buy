@@ -50,7 +50,7 @@ export default class ProductRepository {
 
     const newProduct = await this.product.create({
       ...productData,
-      product_category: category._id,
+      productCategory: category._id,
     });
 
     let newProductVariants: IProductVariant[] = [];
