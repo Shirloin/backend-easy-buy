@@ -79,7 +79,7 @@ export default class ProductController {
         })
       ) as IProductImage[]
       const updatedProduct = await this.productRepository.updateProduct(productData, updatedProductVariants, updatedProductImages, productCategory)
-      res.status(200).json(updatedProductVariants)
+      res.status(200).json(updatedProduct)
     } catch (error) {
       console.log(error)
       next(error)
