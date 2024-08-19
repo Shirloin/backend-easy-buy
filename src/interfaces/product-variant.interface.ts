@@ -9,6 +9,7 @@ export interface IProductVariant {
 }
 
 export interface ICreateProductVariant {
+  _id?: string
   name: string;
   price: DoubleRange;
   stock: DoubleRange;

@@ -7,6 +7,7 @@ export interface IProductImage {
 }
 
 export interface ICreateProductImage {
+  _id?: string
   image_url: string;
   product: IProduct;
 }

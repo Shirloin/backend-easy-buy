@@ -1,3 +1,4 @@
+import { IProductCategory } from "../interfaces/product-category.interface";
 import {
   ICreateProductImage,
   IProductImage,
@@ -94,8 +95,48 @@ export default class ProductRepository {
     return products
   }
 
-  public async updateProduct(product: IProduct) {
-    const updatedProduct = await this.product.findOneAndUpdate({ _id: product._id }, product, { new: true })
-    return updatedProduct
+  public async updateProduct(productData: ICreateProduct,
+    productVariantData: IProductVariant[],
+    productImageData: IProductImage[],
+    productCategory: IProductCategory) {
+    console.log(productVariantData)
+    const product = await this.product.findOne({ _id: productData._id })
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
+    product.name = productData.name
+    product.description = productData.description
+    product.productVariants = productVariantData
+    product.productImages = productImageData
+    await product.save()
+
+    return product
+  }
+
+  public async updateProductVariant(product: ICreateProduct, variant: ICreateProductVariant) {
+    if (variant._id) {
+      return await this.productVariant.findOneAndUpdate(
+        { _id: variant._id },
+        { ...variant, product: product._id },
+        { new: true }
+      );
+    }
+    return await this.productVariant.create(
+      { ...variant, product: product._id }
+    )
+  }
+
+  public async updateProductImage(product: ICreateProduct, image: ICreateProductImage) {
+    if (image._id) {
+      return await this.productImage.findOneAndUpdate(
+        { _id: image._id },
+        { ...image, product: product._id },
+        { new: true }
+      );
+    }
+    return await this.productImage.create(
+      { ...image, product: product._id }
+    )
   }
 }

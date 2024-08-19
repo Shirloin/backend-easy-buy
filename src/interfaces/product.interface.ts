@@ -14,6 +14,7 @@ export interface IProduct {
 }
 
 export interface ICreateProduct {
+  _id?: string
   name: string;
   description: string;
   category: string;
