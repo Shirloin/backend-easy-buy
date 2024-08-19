@@ -93,4 +93,9 @@ export default class ProductRepository {
       .exec();
     return products
   }
+
+  public async updateProduct(product: IProduct) {
+    const updatedProduct = await this.product.findOneAndUpdate({ _id: product._id }, product, { new: true })
+    return updatedProduct
+  }
 }

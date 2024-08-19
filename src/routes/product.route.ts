@@ -16,5 +16,10 @@ export default class ProductRoute implements Routes {
       authMiddleware,
       this.productController.createProduct
     );
+    this.router.put(
+      "/product",
+      authMiddleware,
+      this.productController.updateProduct
+    )
   }
 }

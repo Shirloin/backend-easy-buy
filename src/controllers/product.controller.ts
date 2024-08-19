@@ -46,4 +46,26 @@ export default class ProductController {
       next(error);
     }
   };
+
+  public updateProduct = async (req: Request,
+    res: Response,
+    next: NextFunction) => {
+    const sessionUser = (req.session as any).user;
+    const user = await this.userRepository.getUserById(sessionUser.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const { product } = req.body
+    const productCategory = product.productCategory
+    const productVariants = product.productVariants
+    const productImages = product.productImages
+    console.log(productVariants)
+
+    try {
+
+    } catch (error) {
+
+    }
+    res.status(200).json(product)
+  }
 }
