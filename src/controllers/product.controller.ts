@@ -63,9 +63,9 @@ export default class ProductController {
       const productData: ICreateProduct = { ...product, category: product.productCategory.name };
       const productVariantData: ICreateProductVariant[] = productVariants;
       const productImageData: ICreateProductImage[] = productImages;
-      let productCategory = await this.productCategoryRespository.getProductCategoryByName(productData.name)
+      let productCategory = await this.productCategoryRespository.getProductCategoryByName(productData.category)
       if (!productCategory) {
-        productCategory = await this.productCategoryRespository.createProductCategory(productData.name)
+        productCategory = await this.productCategoryRespository.createProductCategory(productData.category)
       }
 
       const updatedProductVariants = await Promise.all(

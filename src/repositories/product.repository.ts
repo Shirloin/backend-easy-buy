@@ -99,16 +99,26 @@ export default class ProductRepository {
     productVariantData: IProductVariant[],
     productImageData: IProductImage[],
     productCategory: IProductCategory) {
-    console.log(productVariantData)
     const product = await this.product.findOne({ _id: productData._id })
     if (!product) {
       throw new Error("Product not found");
     }
 
+    await this.productVariant.deleteMany({
+      product: product.id,
+      _id: { $nin: productVariantData }
+    })
+
+    await this.productImage.deleteMany({
+      product: product.id,
+      _id: { $nin: productImageData }
+    })
+
     product.name = productData.name
     product.description = productData.description
     product.productVariants = productVariantData
     product.productImages = productImageData
+    product.productCategory = productCategory
     await product.save()
 
     return product
