@@ -43,7 +43,7 @@ export default class ProductController {
       shop.products.push(newProduct);
       await shop.save();
 
-      res.status(200).json(newProduct);
+      res.status(200).json({ product: newProduct, message: "Product inserted" });
     } catch (error) {
       next(error);
     }
@@ -59,29 +59,48 @@ export default class ProductController {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      const { product, productVariants, productImages } = req.body
-      const productData: ICreateProduct = { ...product, category: product.productCategory.name };
-      const productVariantData: ICreateProductVariant[] = productVariants;
-      const productImageData: ICreateProductImage[] = productImages;
-      let productCategory = await this.productCategoryRespository.getProductCategoryByName(productData.category)
+      const { productId } = req.params
+      const { product, productVariants, productImages }: {
+        product: ICreateProduct, productVariants: ICreateProductVariant[], productImages: ICreateProductImage[]
+      } = req.body
+      let productCategory = await this.productCategoryRespository.getProductCategoryByName(product.category)
       if (!productCategory) {
-        productCategory = await this.productCategoryRespository.createProductCategory(productData.category)
+        productCategory = await this.productCategoryRespository.createProductCategory(product.category)
       }
 
       const updatedProductVariants = await Promise.all(
-        productVariantData.map(async (variant: ICreateProductVariant) => {
-          return await this.productRepository.updateProductVariant(productData, variant)
+        productVariants.map(async (variant: ICreateProductVariant) => {
+          return await this.productRepository.updateProductVariant(productId, variant)
         })
       ) as IProductVariant[]
       const updatedProductImages = await Promise.all(
-        productImageData.map(async (image: ICreateProductImage) => {
-          return await this.productRepository.updateProductImage(productData, image)
+        productImages.map(async (image: ICreateProductImage) => {
+          return await this.productRepository.updateProductImage(productId, image)
         })
       ) as IProductImage[]
-      const updatedProduct = await this.productRepository.updateProduct(productData, updatedProductVariants, updatedProductImages, productCategory)
-      res.status(200).json(updatedProduct)
+      const updatedProduct = await this.productRepository.updateProduct(productId, product, updatedProductVariants, updatedProductImages, productCategory)
+      res.status(200).json({ product: updatedProduct, message: "Product updated" })
     } catch (error) {
       console.log(error)
+      next(error)
+    }
+  }
+
+  public deleteProduct = async (req: Request,
+    res: Response,
+    next: NextFunction) => {
+    try {
+      const { productId } = req.params
+      const sessionUser = (req.session as any).user;
+      const user = await this.userRepository.getUserById(sessionUser.id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      await this.productCategoryRespository.deleteProductFromCategory(productId)
+      await this.shopRepository.deleteProductFromShop(productId)
+      const deletedProduct = this.productRepository.deleteProduct(productId)
+      res.status(200).json({ product: deletedProduct, message: "Product deleted" })
+    } catch (error) {
       next(error)
     }
   }

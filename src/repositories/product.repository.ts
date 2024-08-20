@@ -95,11 +95,11 @@ export default class ProductRepository {
     return products
   }
 
-  public async updateProduct(productData: ICreateProduct,
+  public async updateProduct(productId: string, productData: ICreateProduct,
     productVariantData: IProductVariant[],
     productImageData: IProductImage[],
     productCategory: IProductCategory) {
-    const product = await this.product.findOne({ _id: productData._id })
+    const product = await this.product.findOne({ _id: productId })
     if (!product) {
       throw new Error("Product not found");
     }
@@ -124,29 +124,35 @@ export default class ProductRepository {
     return product
   }
 
-  public async updateProductVariant(product: ICreateProduct, variant: ICreateProductVariant) {
+  public async updateProductVariant(productId: string, variant: ICreateProductVariant) {
     if (variant._id) {
       return await this.productVariant.findOneAndUpdate(
         { _id: variant._id },
-        { ...variant, product: product._id },
+        { ...variant, product: productId },
         { new: true }
       );
     }
     return await this.productVariant.create(
-      { ...variant, product: product._id }
+      { ...variant, product: productId }
     )
   }
 
-  public async updateProductImage(product: ICreateProduct, image: ICreateProductImage) {
+  public async updateProductImage(productId: string, image: ICreateProductImage) {
     if (image._id) {
       return await this.productImage.findOneAndUpdate(
         { _id: image._id },
-        { ...image, product: product._id },
+        { ...image, product: productId },
         { new: true }
       );
     }
     return await this.productImage.create(
-      { ...image, product: product._id }
+      { ...image, product: productId }
     )
+  }
+
+  public async deleteProduct(productId: string) {
+    await this.productVariant.deleteMany({ product: productId })
+    await this.productImage.deleteMany({ product: productId })
+    return await this.product.findOneAndDelete({ _id: productId })
   }
 }

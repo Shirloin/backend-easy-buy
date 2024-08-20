@@ -17,9 +17,10 @@ export default class ProductRoute implements Routes {
       this.productController.createProduct
     );
     this.router.put(
-      "/product",
+      "/product/:productId",
       authMiddleware,
       this.productController.updateProduct
     )
+    this.router.delete("/product/:productId", authMiddleware, this.productController.deleteProduct)
   }
 }

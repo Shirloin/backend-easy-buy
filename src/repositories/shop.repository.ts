@@ -37,5 +37,12 @@ class ShopRepository {
     const shop = await this.shop.findById(shopId).populate("products");
     return shop;
   }
+
+  public async deleteProductFromShop(productId: string) {
+    return await this.shop.updateMany(
+      { products: productId },
+      { $pull: { products: productId } }
+    );
+  }
 }
 export default ShopRepository;

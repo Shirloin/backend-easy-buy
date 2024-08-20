@@ -26,4 +26,10 @@ export default class ProductCategoryRepository {
             name: name,
         });
     }
+    public async deleteProductFromCategory(productId: string) {
+        return await this.productCategory.updateMany(
+            { products: productId },
+            { $pull: { products: productId } }
+        );
+    }
 }
