@@ -104,4 +104,15 @@ export default class ProductController {
       next(error)
     }
   }
+
+  public latestProduct = async (req: Request,
+    res: Response,
+    next: NextFunction) => {
+    try {
+      const products = await this.productRepository.latestProduct()
+      res.status(200).json({ products: products })
+    } catch (error) {
+      next(error)
+    }
+  }
 }

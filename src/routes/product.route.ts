@@ -22,5 +22,6 @@ export default class ProductRoute implements Routes {
       this.productController.updateProduct
     )
     this.router.delete("/product/:productId", authMiddleware, this.productController.deleteProduct)
+    this.router.get("/product/latest-product", this.productController.latestProduct)
   }
 }

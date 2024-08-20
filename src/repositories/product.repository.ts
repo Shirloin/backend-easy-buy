@@ -155,4 +155,16 @@ export default class ProductRepository {
     await this.productImage.deleteMany({ product: productId })
     return await this.product.findOneAndDelete({ _id: productId })
   }
+
+  public async latestProduct() {
+    return await this.product.find()
+      .populate([
+        { path: 'productVariants' },
+        { path: 'productImages' },
+        { path: 'productCategory' },
+        { path: 'shop' }
+      ])
+      .sort({ createdAt: -1 })
+      .limit(10);
+  }
 }
