@@ -17,11 +17,12 @@ export default class ProductRoute implements Routes {
       this.productController.createProduct
     );
     this.router.put(
-      "/product/:productId",
+      "/product/:id",
       authMiddleware,
       this.productController.updateProduct
     )
-    this.router.delete("/product/:productId", authMiddleware, this.productController.deleteProduct)
-    this.router.get("/product/latest-product", this.productController.latestProduct)
+    this.router.delete("/product/:id", authMiddleware, this.productController.deleteProduct)
+    this.router.get("/product/latest-product", this.productController.getLatestProduct)
+    this.router.get("/product/:id", this.productController.getProductDetail)
   }
 }

@@ -5,5 +5,6 @@ export const dbConnection = {
     options: {
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 5000
     }
 }

@@ -156,7 +156,7 @@ export default class ProductRepository {
     return await this.product.findOneAndDelete({ _id: productId })
   }
 
-  public async latestProduct() {
+  public async getLatestProduct() {
     return await this.product.find()
       .populate([
         { path: 'productVariants' },
@@ -166,5 +166,14 @@ export default class ProductRepository {
       ])
       .sort({ createdAt: -1 })
       .limit(10);
+  }
+
+  public async getProductDetail(productId: string) {
+    return await this.product.findById(productId).populate([
+      { path: 'productVariants' },
+      { path: 'productImages' },
+      { path: 'productCategory' },
+      { path: 'shop' }
+    ])
   }
 }

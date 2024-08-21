@@ -84,14 +84,14 @@ class AuthController {
       return res.sendStatus(401);
     }
     jwt.verify(token, SECRET_KEY as string, async (err: any, payload: any) => {
-      if (err) return res.sendStatus(403);
+      if (err) return res.status(403);
       const id = payload.id;
       const validateUser = await this.userRepository.getUserById(id);
       if (validateUser != null) {
         (req.session as any).user = validateUser;
         return res.status(200).json({ user: validateUser });
       } else {
-        return res.sendStatus(403);
+        return res.status(403);
       }
       next();
     });

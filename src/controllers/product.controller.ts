@@ -59,7 +59,7 @@ export default class ProductController {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      const { productId } = req.params
+      const { id } = req.params
       const { product, productVariants, productImages }: {
         product: ICreateProduct, productVariants: ICreateProductVariant[], productImages: ICreateProductImage[]
       } = req.body
@@ -70,15 +70,15 @@ export default class ProductController {
 
       const updatedProductVariants = await Promise.all(
         productVariants.map(async (variant: ICreateProductVariant) => {
-          return await this.productRepository.updateProductVariant(productId, variant)
+          return await this.productRepository.updateProductVariant(id, variant)
         })
       ) as IProductVariant[]
       const updatedProductImages = await Promise.all(
         productImages.map(async (image: ICreateProductImage) => {
-          return await this.productRepository.updateProductImage(productId, image)
+          return await this.productRepository.updateProductImage(id, image)
         })
       ) as IProductImage[]
-      const updatedProduct = await this.productRepository.updateProduct(productId, product, updatedProductVariants, updatedProductImages, productCategory)
+      const updatedProduct = await this.productRepository.updateProduct(id, product, updatedProductVariants, updatedProductImages, productCategory)
       res.status(200).json({ product: updatedProduct, message: "Product updated" })
     } catch (error) {
       console.log(error)
@@ -90,27 +90,39 @@ export default class ProductController {
     res: Response,
     next: NextFunction) => {
     try {
-      const { productId } = req.params
+      const { id } = req.params
       const sessionUser = (req.session as any).user;
       const user = await this.userRepository.getUserById(sessionUser.id);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      await this.productCategoryRespository.deleteProductFromCategory(productId)
-      await this.shopRepository.deleteProductFromShop(productId)
-      const deletedProduct = this.productRepository.deleteProduct(productId)
+      await this.productCategoryRespository.deleteProductFromCategory(id)
+      await this.shopRepository.deleteProductFromShop(id)
+      const deletedProduct = this.productRepository.deleteProduct(id)
       res.status(200).json({ product: deletedProduct, message: "Product deleted" })
     } catch (error) {
       next(error)
     }
   }
 
-  public latestProduct = async (req: Request,
+  public getLatestProduct = async (req: Request,
     res: Response,
     next: NextFunction) => {
     try {
-      const products = await this.productRepository.latestProduct()
+      const products = await this.productRepository.getLatestProduct()
       res.status(200).json({ products: products })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public getProductDetail = async (req: Request,
+    res: Response,
+    next: NextFunction) => {
+    try {
+      const { id } = req.params
+      const product = await this.productRepository.getProductDetail(id)
+      res.status(200).json({ product: product })
     } catch (error) {
       next(error)
     }

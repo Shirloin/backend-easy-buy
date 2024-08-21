@@ -22,7 +22,7 @@ class AuthRoute implements Routes {
     );
     this.router.post("/login", ValidateUserLogin, this.authController.login);
     this.router.get("/logout", this.authController.logout);
-    this.router.get("/validate_token", this.authController.validateToken);
+    this.router.get("/validate-token", this.authController.validateToken);
   }
 }
 
