@@ -22,11 +22,11 @@ export default class CartRepository {
         return CartRepository.instance
     }
 
-    public async addToCart(user_id: string, product_id: string, shop_id: string, quantity: number) {
+    public async addToCart(user_id: string, productId: string, shopId: string, quantity: number) {
         const newCartItem = await this.cartItem.create({
             quantity: quantity,
-            product: product_id,
-            shop: shop_id
+            product: productId,
+            shop: shopId
         })
         let cart = await this.cart.findOne({ user: user_id })
         if (!cart) {

@@ -17,9 +17,9 @@ export default class CartController {
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
-            const { product_id, shop_id, quantity } = req.body
-            const newCart = await this.cartRepository.addToCart(user._id, product_id, shop_id, quantity)
-            res.status(200).json(newCart)
+            const { productId, shopId, quantity } = req.body
+            const newCart = await this.cartRepository.addToCart(user._id, productId, shopId, quantity)
+            res.status(200).json({ cart: newCart, message: "Product has been added to cart" })
         } catch (error) {
             next(error)
         }
