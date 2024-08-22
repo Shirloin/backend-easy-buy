@@ -16,11 +16,11 @@ import Shop from "../models/shop.model";
 
 export default class ProductRepository {
   static instance: ProductRepository;
-  public shop = Shop;
-  public product = Product;
-  public productVariant = ProductVariant;
-  public productImage = ProductImage;
-  public productCategory = ProductCategory;
+  private shop = Shop;
+  private product = Product;
+  private productVariant = ProductVariant;
+  private productImage = ProductImage;
+  private productCategory = ProductCategory;
 
   constructor() {
     if (ProductRepository.instance) {

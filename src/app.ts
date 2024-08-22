@@ -8,6 +8,7 @@ import ErrorHandling from "./error/index.ts";
 import ShopRoute from "./routes/shop.route.ts";
 import session from "express-session";
 import ProductRoute from "./routes/product.route.ts";
+import CartRoute from "./routes/cart.route.ts";
 class App {
   public app: express.Application;
   public env: string;
@@ -62,6 +63,7 @@ class App {
     this.app.use("/api", new AuthRoute().router);
     this.app.use("/api", new ShopRoute().router);
     this.app.use("/api", new ProductRoute().router);
+    this.app.use("/api", new CartRoute().router)
     this.app.use(ErrorHandling);
   }
 }
