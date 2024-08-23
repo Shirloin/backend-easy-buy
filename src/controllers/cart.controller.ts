@@ -23,6 +23,7 @@ export default class CartController {
             await user.save()
             res.status(200).json({ cart: newCart, message: "Product has been added to cart" })
         } catch (error) {
+            console.log(error)
             next(error)
         }
     }

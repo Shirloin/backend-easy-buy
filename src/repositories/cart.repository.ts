@@ -25,20 +25,33 @@ export default class CartRepository {
     }
 
     public async addToCart(userId: string, variantId: string, shopId: string, quantity: number) {
-        const newCartItem = await this.cartItem.create({
-            quantity: quantity,
-            variant: variantId,
-        })
-        let cart = await this.cart.findOne({ user: userId, shop: shopId })
-        if (!cart) {
+        let cart = await this.cart.findOne({ user: userId, shop: shopId });
+
+        if (cart) {
+            const existingCartItem = await this.cartItem.findOne({ variant: variantId, _id: { $in: cart.items } },)
+
+            if (existingCartItem) {
+                existingCartItem.quantity += quantity;
+            } else {
+                const newCartItem = await this.cartItem.create({
+                    quantity: quantity,
+                    variant: variantId,
+                });
+                cart.items.push(newCartItem);
+            }
+
+            await cart.save();
+        } else {
+            const newCartItem = await this.cartItem.create({
+                quantity: quantity,
+                variant: variantId,
+            });
+
             cart = await this.cart.create({
                 user: userId,
                 shop: shopId,
                 items: [newCartItem],
-            })
-        } else {
-            cart.items.push(newCartItem)
-            await cart.save()
+            });
         }
         return cart
     }
