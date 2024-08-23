@@ -39,6 +39,12 @@ const user_schema: Schema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Shop",
   },
+  carts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Cart",
+    }
+  ]
 });
 
 const User = model<IUser & Document>("User", user_schema);

@@ -1,8 +1,10 @@
+import { populate } from "dotenv"
 import { IProductVariant } from "../interfaces/product-variant.interface"
 import { IShop } from "../interfaces/shop.interface"
 import { IUser } from "../interfaces/user.interface"
 import CartItem from "../models/cart-item.model"
 import Cart from "../models/cart.model"
+import path from "path"
 
 export default class CartRepository {
     static instance: CartRepository
@@ -22,22 +24,49 @@ export default class CartRepository {
         return CartRepository.instance
     }
 
-    public async addToCart(user_id: string, productId: string, shopId: string, quantity: number) {
+    public async addToCart(userId: string, variantId: string, shopId: string, quantity: number) {
         const newCartItem = await this.cartItem.create({
             quantity: quantity,
-            product: productId,
-            shop: shopId
+            variant: variantId,
         })
-        let cart = await this.cart.findOne({ user: user_id })
+        let cart = await this.cart.findOne({ user: userId, shop: shopId })
         if (!cart) {
             cart = await this.cart.create({
-                user: user_id,
-                items: [newCartItem._id]
+                user: userId,
+                shop: shopId,
+                items: [newCartItem],
             })
         } else {
             cart.items.push(newCartItem)
             await cart.save()
         }
         return cart
+    }
+    public async getCart(userId: string) {
+        return await this.cart.find({ user: userId })
+            .populate([{
+                path: 'items',
+                populate: [
+                    {
+                        path: 'variant',
+                        model: 'ProductVariant',
+                        populate: [
+                            {
+                                path: "product",
+                                model: "Product",
+                                populate: [
+                                    {
+                                        path: "productImages",
+                                        model: "ProductImage"
+                                    }
+
+                                ]
+                            }
+                        ]
+                    },
+                ],
+            },
+            { path: "shop", model: "Shop" }])
+            .exec();
     }
 }

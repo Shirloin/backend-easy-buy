@@ -1,3 +1,4 @@
+import { ICart } from "./cart.interface";
 import { IShop } from "./shop.interface";
 
 export interface IUser {
@@ -10,6 +11,7 @@ export interface IUser {
   imageUrl: string;
   phone: string;
   shop: IShop;
+  carts: ICart[]
 }
 
 export interface ICreateUser {

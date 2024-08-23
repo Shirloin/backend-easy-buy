@@ -6,13 +6,9 @@ const cart_item_schema = new Schema({
         type: Number,
         required: true
     },
-    product: {
+    variant: {
         type: Schema.Types.ObjectId,
         ref: "ProductVariant"
-    },
-    shop: {
-        type: Schema.Types.ObjectId,
-        ref: "Shop"
     },
 })
 

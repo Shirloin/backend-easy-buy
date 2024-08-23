@@ -6,6 +6,10 @@ const cart_schema: Schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
     },
+    shop: {
+        type: Schema.Types.ObjectId,
+        ref: "Shop"
+    },
     items: [
         {
             type: Schema.Types.ObjectId,
