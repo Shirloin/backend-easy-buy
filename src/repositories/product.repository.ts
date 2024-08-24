@@ -8,6 +8,8 @@ import {
   IProductVariant,
 } from "../interfaces/product-variant.interface";
 import { ICreateProduct, IProduct } from "../interfaces/product.interface";
+import CartItem from "../models/cart-item.model";
+import Cart from "../models/cart.model";
 import ProductCategory from "../models/product-category.model";
 import ProductImage from "../models/product-image.model";
 import ProductVariant from "../models/product-variant.model";
@@ -21,6 +23,8 @@ export default class ProductRepository {
   private productVariant = ProductVariant;
   private productImage = ProductImage;
   private productCategory = ProductCategory;
+  private cart = Cart
+  private cartItem = CartItem
 
   constructor() {
     if (ProductRepository.instance) {
@@ -151,6 +155,10 @@ export default class ProductRepository {
   }
 
   public async deleteProduct(productId: string) {
+    const productVariants = await this.productVariant.find({ product: productId })
+    const variantIds = productVariants.map(variant => variant._id);
+    await this.cartItem.deleteMany({ variant: { $in: variantIds } });
+    await this.cart.deleteMany({ items: { $size: 0 } });
     await this.productVariant.deleteMany({ product: productId })
     await this.productImage.deleteMany({ product: productId })
     return await this.product.findOneAndDelete({ _id: productId })

@@ -1,10 +1,5 @@
-import { populate } from "dotenv"
-import { IProductVariant } from "../interfaces/product-variant.interface"
-import { IShop } from "../interfaces/shop.interface"
-import { IUser } from "../interfaces/user.interface"
 import CartItem from "../models/cart-item.model"
 import Cart from "../models/cart.model"
-import path from "path"
 
 export default class CartRepository {
     static instance: CartRepository
@@ -32,6 +27,7 @@ export default class CartRepository {
 
             if (existingCartItem) {
                 existingCartItem.quantity += quantity;
+                await existingCartItem.save()
             } else {
                 const newCartItem = await this.cartItem.create({
                     quantity: quantity,
