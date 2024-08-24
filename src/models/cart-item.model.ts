@@ -10,6 +10,10 @@ const cart_item_schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "ProductVariant"
     },
+    cart: {
+        type: Schema.Types.ObjectId,
+        ref: "Cart"
+    }
 })
 
 const CartItem = model<ICartItem & Document>("CartItem", cart_item_schema)

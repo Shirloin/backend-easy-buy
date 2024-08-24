@@ -15,5 +15,7 @@ export default class CartRoute implements Routes {
         this.router.get("/cart", authMiddleware, this.cartController.getCart)
         this.router.post("/cart/add-to-cart", authMiddleware, this.cartController.addToCart)
         this.router.post("/cart/update-quantity", authMiddleware, ValidateUpdateCartQuantity, this.cartController.updateCartQuantity)
+        this.router.post("/cart/increment-quantity", authMiddleware, this.cartController.incrementCartQuantity)
+        this.router.post("/cart/decrement-quantity", authMiddleware, this.cartController.decrementCartQuantity)
     }
 }

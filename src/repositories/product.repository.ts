@@ -189,4 +189,8 @@ export default class ProductRepository {
       { path: 'shop' }
     ])
   }
+
+  public async getProductVariantById(variantId: string) {
+    return await this.productVariant.findById(variantId)
+  }
 }

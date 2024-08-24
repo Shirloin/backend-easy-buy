@@ -1,3 +1,4 @@
+import { populate } from "dotenv"
 import CartItem from "../models/cart-item.model"
 import Cart from "../models/cart.model"
 
@@ -79,17 +80,43 @@ export default class CartRepository {
             .exec();
     }
 
-    public async updateCartQuantity(userId: string, variantId: string, shopId: string, quantity: number) {
-        let cart = await this.cart.findOne({ user: userId, shop: shopId });
-        if (!cart) {
-            return null
-        }
-        const cartItem = await this.cartItem.findOne({ variant: variantId, _id: { $in: cart.items } })
-        if (!cartItem) {
-            return null
-        }
+    public async updateCartQuantity(cartId: string, variantId: string, quantity: number) {
+        const cartItem = await this.cartItem.findOne({
+            cart: cartId,
+            variant: variantId
+        });
+        if (!cartItem) return null
         cartItem.quantity = quantity
         await cartItem.save()
-        return cart
+        return cartItem
+    }
+
+    public async incrementCartQuantity(cartId: string, variantId: string) {
+        const cartItem = await this.cartItem.findOne({
+            cart: cartId,
+            variant: variantId
+        });
+        if (!cartItem) return null
+        cartItem.quantity += 1
+        await cartItem.save()
+        return cartItem
+    }
+    public async decrementCartQuantity(cartId: string, variantId: string) {
+        const cartItem = await this.cartItem.findOne({
+            cart: cartId,
+            variant: variantId
+        });
+        if (!cartItem) return null
+        cartItem.quantity -= 1
+        await cartItem.save()
+        return cartItem
+    }
+
+    public async getCartItem(cartId: string, variantId: string) {
+        const cartItem = await this.cartItem.findOne({
+            cart: cartId,
+            variant: variantId
+        });
+        return cartItem
     }
 }
