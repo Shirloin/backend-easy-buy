@@ -119,4 +119,16 @@ export default class CartRepository {
         });
         return cartItem
     }
+
+    public async deleteCartItem(cartItemId: string) {
+        const cartItem = await this.cartItem.deleteOne({ _id: cartItemId })
+        if (cartItem.deletedCount === 0) {
+            return null
+        }
+        const cart = await this.cart.updateMany(
+            { items: cartItemId },
+            { $pull: { items: cartItemId } }
+        );
+        return cart
+    }
 }

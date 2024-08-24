@@ -128,6 +128,23 @@ export default class CartController {
         }
     }
 
+    public deleteCartItem = async (req: Request,
+        res: Response,
+        next: NextFunction) => {
+        try {
+            const sessionUser = (req.session as any).user;
+            const user = await this.userRepository.getUserById(sessionUser.id);
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            const { cartItemId } = req.params
+            const cart = await this.cartRepository.deleteCartItem(cartItemId)
+            return res.status(200).json({ message: "Cart has been removed" })
+        } catch (error) {
+            next(error)
+        }
+    }
+
 
 
 }
