@@ -43,4 +43,22 @@ export default class CartController {
             next(error)
         }
     }
+    public updateCartQuantity = async (req: Request,
+        res: Response,
+        next: NextFunction) => {
+        try {
+            const sessionUser = (req.session as any).user;
+            const user = await this.userRepository.getUserById(sessionUser.id);
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            const { variantId, shopId, quantity } = req.body
+            const cart = await this.cartRepository.updateCartQuantity(user._id, variantId, shopId, quantity)
+            res.status(200).json({ cart: cart })
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
+    }
+
 }

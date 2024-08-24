@@ -157,8 +157,13 @@ export default class ProductRepository {
   public async deleteProduct(productId: string) {
     const productVariants = await this.productVariant.find({ product: productId })
     const variantIds = productVariants.map(variant => variant._id);
+    const deletedCartItems = await this.cartItem.find({ variant: { $in: variantIds } });
     await this.cartItem.deleteMany({ variant: { $in: variantIds } });
-    await this.cart.deleteMany({ items: { $size: 0 } });
+    const deletedCartItemIds = deletedCartItems.map(item => item._id);
+    await this.cart.updateMany(
+      { items: { $in: deletedCartItemIds } },
+      { $pull: { items: { $in: deletedCartItemIds } } }
+    );
     await this.productVariant.deleteMany({ product: productId })
     await this.productImage.deleteMany({ product: productId })
     return await this.product.findOneAndDelete({ _id: productId })

@@ -78,4 +78,18 @@ export default class CartRepository {
             { path: "shop", model: "Shop" }])
             .exec();
     }
+
+    public async updateCartQuantity(userId: string, variantId: string, shopId: string, quantity: number) {
+        let cart = await this.cart.findOne({ user: userId, shop: shopId });
+        if (!cart) {
+            return null
+        }
+        const cartItem = await this.cartItem.findOne({ variant: variantId, _id: { $in: cart.items } })
+        if (!cartItem) {
+            return null
+        }
+        cartItem.quantity = quantity
+        await cartItem.save()
+        return cart
+    }
 }
