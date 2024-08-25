@@ -2,10 +2,12 @@ import { populate } from "dotenv"
 import CartItem from "../models/cart-item.model"
 import Cart from "../models/cart.model"
 import UserRepository from "./user.repository"
+import User from "../models/user.model"
 
 export default class CartRepository {
     static instance: CartRepository
     private userRepository = UserRepository.getInstance()
+    private user = User
     private cart = Cart
     private cartItem = CartItem
     constructor() {
@@ -20,6 +22,10 @@ export default class CartRepository {
             CartRepository.instance = new CartRepository()
         }
         return CartRepository.instance
+    }
+
+    public async userCart(userId: string, cartId: string) {
+        return await this.user.find({ _id: userId, carts: cartId })
     }
 
     public async addToCart(userId: string, variantId: string, shopId: string, quantity: number) {
@@ -54,6 +60,11 @@ export default class CartRepository {
         }
         return cart
     }
+
+    public async getCartByUserAndShop(userId: string, shopId: string) {
+        return await this.cart.findOne({ user: userId, shop: shopId })
+    }
+
     public async getCart(userId: string) {
         return await this.cart.find({ user: userId })
             .populate([{
@@ -147,9 +158,9 @@ export default class CartRepository {
         if (user) {
             return null
         }
-        const emptyCartIds = await this.cart.find({ items: { size: 0 } }).select('_id')
+        const emptyCartIds = await this.cart.find({ user: userId, items: { size: 0 } }).select('_id')
         if (emptyCartIds.length > 0) {
-            user = await this.userRepository.updateUser(userId, {
+            user = await this.user.findOneAndUpdate({ _id: userId }, {
                 $pull: { carts: { $in: emptyCartIds.map((cart) => cart._id) } }
             })
         }

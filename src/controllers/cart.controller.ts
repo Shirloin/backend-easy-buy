@@ -20,10 +20,10 @@ export default class CartController {
                 return res.status(404).json({ message: "User not found" });
             }
             const { variantId, shopId, quantity } = req.body
-            const newCart = await this.cartRepository.addToCart(user._id, variantId, shopId, quantity)
-            user.carts.push(newCart)
+            const cart = await this.cartRepository.addToCart(user._id, variantId, shopId, quantity)
+            user.carts.push(cart)
             await user.save()
-            res.status(200).json({ cart: newCart, message: "Product has been added to cart" })
+            res.status(200).json({ cart: cart, message: "Product has been added to cart" })
         } catch (error) {
             console.log(error)
             next(error)
@@ -132,7 +132,7 @@ export default class CartController {
             const { cartItemId } = req.params
             const cart = await this.cartRepository.deleteCartItem(cartItemId)
             const updatedUser = await this.cartRepository.removeCartFromUser(user._id)
-
+            await this.cartRepository.deleteEmptyCart()
             return res.status(200).json({ message: "Cart has been removed" })
         } catch (error) {
             next(error)
