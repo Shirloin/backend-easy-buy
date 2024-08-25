@@ -18,5 +18,7 @@ export default class CartRoute implements Routes {
         this.router.put("/cart/:cartItemId/increment-quantity", authMiddleware, this.cartController.incrementCartQuantity)
         this.router.put("/cart/:cartItemId/decrement-quantity", authMiddleware, this.cartController.decrementCartQuantity)
         this.router.delete("/cart/:cartItemId", authMiddleware, this.cartController.deleteCartItem)
+        this.router.delete("/carts", authMiddleware, this.cartController.deleteCartItems)
+
     }
 }

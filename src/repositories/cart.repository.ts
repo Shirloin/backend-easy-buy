@@ -1,9 +1,11 @@
 import { populate } from "dotenv"
 import CartItem from "../models/cart-item.model"
 import Cart from "../models/cart.model"
+import UserRepository from "./user.repository"
 
 export default class CartRepository {
     static instance: CartRepository
+    private userRepository = UserRepository.getInstance()
     private cart = Cart
     private cartItem = CartItem
     constructor() {
@@ -128,5 +130,32 @@ export default class CartRepository {
             { $pull: { items: cartItemId } }
         );
         return cart
+    }
+
+    public async deleteCartItems(cartItemIds: string[]) {
+        const cartItems = await this.cart.deleteMany({ _id: { $in: cartItemIds } })
+
+        const cart = await this.cart.updateMany(
+            { items: { $in: cartItemIds } },
+            { $pull: { items: { $in: cartItemIds } } }
+        )
+        return cart
+    }
+
+    public async removeCartFromUser(userId: string) {
+        let user = await this.userRepository.getUserById(userId)
+        if (user) {
+            return null
+        }
+        const emptyCartIds = await this.cart.find({ items: { size: 0 } }).select('_id')
+        if (emptyCartIds.length > 0) {
+            user = await this.userRepository.updateUser(userId, {
+                $pull: { carts: { $in: emptyCartIds.map((cart) => cart._id) } }
+            })
+        }
+        return user
+    }
+    public async deleteEmptyCart() {
+        await this.cart.deleteMany({ items: { $size: 0 } });
     }
 }

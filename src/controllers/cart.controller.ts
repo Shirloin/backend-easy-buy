@@ -131,6 +131,30 @@ export default class CartController {
             }
             const { cartItemId } = req.params
             const cart = await this.cartRepository.deleteCartItem(cartItemId)
+            const updatedUser = await this.cartRepository.removeCartFromUser(user._id)
+
+            return res.status(200).json({ message: "Cart has been removed" })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    public deleteCartItems = async (req: Request,
+        res: Response,
+        next: NextFunction) => {
+        try {
+            const sessionUser = (req.session as any).user;
+            const user = await this.userRepository.getUserById(sessionUser.id);
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            const { cartItemIds } = req.body
+            if (cartItemIds.length === 0 || !Array.isArray(cartItemIds)) {
+                return res.status(400).json({ message: "Invalid cart item ID's" })
+            }
+            const cart = await this.cartRepository.deleteCartItems(cartItemIds)
+            const updatedUser = await this.cartRepository.removeCartFromUser(user._id)
+            await this.cartRepository.deleteEmptyCart()
             return res.status(200).json({ message: "Cart has been removed" })
         } catch (error) {
             next(error)

@@ -36,6 +36,10 @@ class UserRepository {
     const user = await this.user.findById(id).populate("shop");
     return user;
   }
+
+  public async updateUser(userId: string, update: any) {
+    return await this.user.findOneAndUpdate({ _id: userId }, update, { new: true })
+  }
 }
 
 export default UserRepository;
