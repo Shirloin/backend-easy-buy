@@ -54,17 +54,17 @@ export default class CartController {
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
-            const { variantId, cartId, quantity } = req.body
+            const { cartItemId, quantity } = req.body
 
-            const productVariant = await this.productRepository.getProductVariantById(variantId)
-            if (!productVariant) {
-                return res.status(404).json({ message: "Product Variant not found" })
+            const cartItem = await this.cartRepository.getCartItemById(cartItemId)
+            if (!cartItem) {
+                return res.status(404).json({ message: "Cart Item not found" })
             }
-            if (productVariant.stock < quantity) {
+            if (cartItem.variant.stock < quantity) {
                 return res.status(422).json({ message: "Quantity must be lower than total stock" })
             }
 
-            const cart = await this.cartRepository.updateCartQuantity(cartId, variantId, quantity)
+            const cart = await this.cartRepository.updateCartQuantity(cartItemId, quantity)
             res.status(200).json({ cart: cart })
         } catch (error) {
             console.log(error)
@@ -80,19 +80,15 @@ export default class CartController {
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
-            const { cartId, variantId } = req.body
-            const productVariant = await this.productRepository.getProductVariantById(variantId)
-            if (!productVariant) {
-                return res.status(404).json({ message: "Product Variant not found" })
-            }
-            const cartItem = await this.cartRepository.getCartItem(cartId, variantId)
+            const { cartItemId } = req.params
+            const cartItem = await this.cartRepository.getCartItemById(cartItemId)
             if (!cartItem) {
                 return res.status(404).json({ message: "Cart Item not found" })
             }
-            if (productVariant.stock < cartItem.quantity) {
+            if (cartItem.variant.stock <= cartItem.quantity) {
                 return res.status(422).json({ message: "Quantity must be lower than total stock" })
             }
-            const cart = await this.cartRepository.incrementCartQuantity(cartId, variantId)
+            const cart = await this.cartRepository.incrementCartQuantity(cartItemId)
             res.status(200).json({ cart: cart })
         } catch (error) {
             console.log(error)
@@ -108,19 +104,15 @@ export default class CartController {
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
-            const { cartId, variantId } = req.body
-            const productVariant = await this.productRepository.getProductVariantById(variantId)
-            if (!productVariant) {
-                return res.status(404).json({ message: "Product Variant not found" })
-            }
-            const cartItem = await this.cartRepository.getCartItem(cartId, variantId)
+            const { cartItemId } = req.params
+            const cartItem = await this.cartRepository.getCartItemById(cartItemId)
             if (!cartItem) {
                 return res.status(404).json({ message: "Cart Item not found" })
             }
             if (cartItem.quantity <= 1) {
                 return res.status(422).json({ message: "Quantity must be at least 1" })
             }
-            const cart = await this.cartRepository.decrementCartQuantity(cartId, variantId)
+            const cart = await this.cartRepository.decrementCartQuantity(cartItemId)
             res.status(200).json({ cart: cart })
         } catch (error) {
             console.log(error)

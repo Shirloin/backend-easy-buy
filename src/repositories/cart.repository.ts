@@ -80,32 +80,24 @@ export default class CartRepository {
             .exec();
     }
 
-    public async updateCartQuantity(cartId: string, variantId: string, quantity: number) {
-        const cartItem = await this.cartItem.findOne({
-            cart: cartId,
-            variant: variantId
-        });
+    public async updateCartQuantity(cartItemId: string, quantity: number) {
+        const cartItem = await this.cartItem.findById(cartItemId)
+
         if (!cartItem) return null
         cartItem.quantity = quantity
         await cartItem.save()
         return cartItem
     }
 
-    public async incrementCartQuantity(cartId: string, variantId: string) {
-        const cartItem = await this.cartItem.findOne({
-            cart: cartId,
-            variant: variantId
-        });
+    public async incrementCartQuantity(cartItemId: string) {
+        const cartItem = await this.cartItem.findById(cartItemId)
         if (!cartItem) return null
         cartItem.quantity += 1
         await cartItem.save()
         return cartItem
     }
-    public async decrementCartQuantity(cartId: string, variantId: string) {
-        const cartItem = await this.cartItem.findOne({
-            cart: cartId,
-            variant: variantId
-        });
+    public async decrementCartQuantity(cartItemId: string) {
+        const cartItem = await this.cartItem.findById(cartItemId)
         if (!cartItem) return null
         cartItem.quantity -= 1
         await cartItem.save()
@@ -118,6 +110,12 @@ export default class CartRepository {
             variant: variantId
         });
         return cartItem
+    }
+
+    public async getCartItemById(cartItemId: string) {
+        return await this.cartItem.findById(cartItemId).populate([
+            "variant",
+        ])
     }
 
     public async deleteCartItem(cartItemId: string) {
