@@ -20,9 +20,28 @@ export default class CartController {
                 return res.status(404).json({ message: "User not found" });
             }
             const { variantId, shopId, quantity } = req.body
-            const cart = await this.cartRepository.addToCart(user._id, variantId, shopId, quantity)
-            user.carts.push(cart)
-            await user.save()
+            let cart = await this.cartRepository.getCartByUserAndShop(user._id, shopId)
+            if (cart) {
+                console.log("cart exist")
+                const existingCartItem = await this.cartRepository.getCartItemByCartAndVariant(cart.items, variantId)
+
+                if (existingCartItem) {
+                    console.log("cart item exist")
+                    existingCartItem.quantity += quantity;
+                    await existingCartItem.save()
+                } else {
+                    console.log("cart item not exist")
+                    const newCartItem = await this.cartRepository.createCartItem(variantId, quantity);
+                    cart.items.push(newCartItem);
+                    await cart.save()
+                }
+            } else {
+                console.log("cart not exist")
+                const newCartItem = await this.cartRepository.createCartItem(variantId, quantity);
+                cart = await this.cartRepository.createCart(user._id, shopId, newCartItem._id)
+                user.carts.push(cart)
+                await user.save()
+            }
             res.status(200).json({ cart: cart, message: "Product has been added to cart" })
         } catch (error) {
             console.log(error)

@@ -3,6 +3,7 @@ import CartItem from "../models/cart-item.model"
 import Cart from "../models/cart.model"
 import UserRepository from "./user.repository"
 import User from "../models/user.model"
+import { ICartItem } from "../interfaces/cart-item.interface"
 
 export default class CartRepository {
     static instance: CartRepository
@@ -60,6 +61,25 @@ export default class CartRepository {
         }
         return cart
     }
+
+    public async createCart(userId: string, shopId: string, itemId: string) {
+        return await this.cart.create({
+            user: userId,
+            shop: shopId,
+            items: [itemId],
+        });
+    }
+
+    public async createCartItem(variantId: string, quantity: number) {
+        return await this.cartItem.create({
+            quantity: quantity,
+            variant: variantId,
+        });
+    }
+    public async getCartItemByCartAndVariant(cartItem: ICartItem[], variantId: string) {
+        return await this.cartItem.findOne({ variant: variantId, _id: { $in: cartItem } },)
+    }
+
 
     public async getCartByUserAndShop(userId: string, shopId: string) {
         return await this.cart.findOne({ user: userId, shop: shopId })
@@ -144,7 +164,7 @@ export default class CartRepository {
     }
 
     public async deleteCartItems(cartItemIds: string[]) {
-        const cartItems = await this.cart.deleteMany({ _id: { $in: cartItemIds } })
+        const cartItems = await this.cartItem.deleteMany({ _id: { $in: cartItemIds } })
 
         const cart = await this.cart.updateMany(
             { items: { $in: cartItemIds } },
@@ -155,14 +175,16 @@ export default class CartRepository {
 
     public async removeCartFromUser(userId: string) {
         let user = await this.userRepository.getUserById(userId)
-        if (user) {
+        if (!user) {
             return null
         }
-        const emptyCartIds = await this.cart.find({ user: userId, items: { size: 0 } }).select('_id')
-        if (emptyCartIds.length > 0) {
-            user = await this.user.findOneAndUpdate({ _id: userId }, {
-                $pull: { carts: { $in: emptyCartIds.map((cart) => cart._id) } }
-            })
+
+        const emptyCarts = await this.cart.find({ user: userId, items: { $size: 0 } }).select('_id');
+        if (emptyCarts.length > 0) {
+            user = await this.user.findOneAndUpdate(
+                { _id: userId },
+                { $pull: { carts: { $in: emptyCarts.map(cart => cart._id) } } }
+            );
         }
         return user
     }
