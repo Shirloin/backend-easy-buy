@@ -1,6 +1,7 @@
+import { Document } from "mongoose";
 import { IProduct } from "./product.interface";
 
-export interface IProductCategory {
+export interface IProductCategory extends Document {
   _id: string;
   name: string;
   products: IProduct[];

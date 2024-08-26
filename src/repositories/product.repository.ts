@@ -136,7 +136,7 @@ export default class ProductRepository {
         { path: 'shop' }
       ])
       .sort({ createdAt: -1 })
-      .limit(10);
+      .limit(100);
   }
 
   public async getProductDetail(productId: string) {
