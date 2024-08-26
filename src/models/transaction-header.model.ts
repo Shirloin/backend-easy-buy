@@ -1,7 +1,7 @@
 import { Document, model, Schema } from "mongoose";
 import ITransactionHeader from "../interfaces/transaction-header.interface";
 
-const transacion_header_schema: Schema = new Schema({
+const transaction_header_schema: Schema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: "User",
@@ -11,9 +11,16 @@ const transacion_header_schema: Schema = new Schema({
         ref: "Shop",
     },
     date: {
-        type: Date
-    }
+        type: Date,
+        default: Date.now,
+    },
+    transactionDetails: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "TransactionDetail",
+        }
+    ]
 })
 
-const TransactionHeader = model<ITransactionHeader & Document>("TransactionHeader", transacion_header_schema)
+const TransactionHeader = model<ITransactionHeader & Document>("TransactionHeader", transaction_header_schema)
 export default TransactionHeader

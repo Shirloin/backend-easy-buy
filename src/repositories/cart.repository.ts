@@ -25,6 +25,17 @@ export default class CartRepository {
         return CartRepository.instance
     }
 
+    public async getCartById(cartId: string) {
+        return await this.cart.findById(cartId).populate([
+            { path: "shop" },
+            {
+                path: "items", populate: [
+                    { path: "variant" }
+                ]
+            }
+        ])
+    }
+
     public async userCart(userId: string, cartId: string) {
         return await this.user.find({ _id: userId, carts: cartId })
     }
@@ -97,13 +108,6 @@ export default class CartRepository {
                             {
                                 path: "product",
                                 model: "Product",
-                                populate: [
-                                    {
-                                        path: "productImages",
-                                        model: "ProductImage"
-                                    }
-
-                                ]
                             }
                         ]
                     },

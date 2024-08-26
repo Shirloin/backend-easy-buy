@@ -70,11 +70,6 @@ export default class ProductController {
           return await this.productRepository.updateProductVariant(id, variant)
         })
       ) as IProductVariant[]
-      // const updatedProductImages = await Promise.all(
-      //   productImages.map(async (image: ICreateProductImage) => {
-      //     return await this.productRepository.updateProductImage(id, image)
-      //   })
-      // ) as IProductImage[]
       const updatedProduct = await this.productRepository.updateProduct(id, product, updatedProductVariants, productCategory)
       res.status(200).json({ product: updatedProduct, message: "Product updated" })
     } catch (error) {

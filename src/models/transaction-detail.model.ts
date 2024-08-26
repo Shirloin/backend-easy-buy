@@ -18,5 +18,5 @@ const transaction_detail_schema: Schema = new Schema({
         ref: "ProductVariant",
     },
 })
-const TransactionDetail = model<ITransactionDetail & Document>("TransactionHeader", transaction_detail_schema)
+const TransactionDetail = model<ITransactionDetail & Document>("TransactionDetail", transaction_detail_schema)
 export default TransactionDetail
