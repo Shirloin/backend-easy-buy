@@ -1,6 +1,14 @@
-import { Schema } from "mongoose";
+import { model, Schema } from "mongoose";
+import ITransactionDetail from "../interfaces/transaction-detail.interface";
 
 const transaction_detail_schema: Schema = new Schema({
+    quantity: {
+        type: Number,
+    },
+    transactionHeader: {
+        type: Schema.Types.ObjectId,
+        ref: "TransactionHeader"
+    },
     product: {
         type: Schema.Types.ObjectId,
         ref: "Product",
@@ -8,5 +16,7 @@ const transaction_detail_schema: Schema = new Schema({
     productVariant: {
         type: Schema.Types.ObjectId,
         ref: "ProductVariant",
-    }
+    },
 })
+const TransactionDetail = model<ITransactionDetail & Document>("TransactionHeader", transaction_detail_schema)
+export default TransactionDetail

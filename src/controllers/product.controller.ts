@@ -4,7 +4,6 @@ import ShopRepository from "../repositories/shop.repository";
 import UserRepository from "../repositories/user.repository";
 import { ICreateProduct } from "../interfaces/product.interface";
 import { ICreateProductVariant, IProductVariant } from "../interfaces/product-variant.interface";
-import { ICreateProductImage, IProductImage } from "../interfaces/product-image.interface";
 import ProductCategoryRepository from "../repositories/product-category.repository";
 
 export default class ProductController {
@@ -24,16 +23,14 @@ export default class ProductController {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      const { product, productVariants, productImages } = req.body;
+      const { product, productVariants } = req.body;
 
       const productData: ICreateProduct = { ...product, shop: user.shop };
       const productVariantData: ICreateProductVariant[] = productVariants;
-      const productImageData: ICreateProductImage[] = productImages;
 
       const newProduct = await this.productRepository.createProduct(
         productData,
         productVariantData,
-        productImageData
       );
 
       const shop = await this.shopRepository.getShopById(productData.shop._id);
@@ -60,8 +57,8 @@ export default class ProductController {
         return res.status(404).json({ message: "User not found" });
       }
       const { id } = req.params
-      const { product, productVariants, productImages }: {
-        product: ICreateProduct, productVariants: ICreateProductVariant[], productImages: ICreateProductImage[]
+      const { product, productVariants }: {
+        product: ICreateProduct, productVariants: ICreateProductVariant[]
       } = req.body
       let productCategory = await this.productCategoryRespository.getProductCategoryByName(product.category)
       if (!productCategory) {
@@ -73,12 +70,12 @@ export default class ProductController {
           return await this.productRepository.updateProductVariant(id, variant)
         })
       ) as IProductVariant[]
-      const updatedProductImages = await Promise.all(
-        productImages.map(async (image: ICreateProductImage) => {
-          return await this.productRepository.updateProductImage(id, image)
-        })
-      ) as IProductImage[]
-      const updatedProduct = await this.productRepository.updateProduct(id, product, updatedProductVariants, updatedProductImages, productCategory)
+      // const updatedProductImages = await Promise.all(
+      //   productImages.map(async (image: ICreateProductImage) => {
+      //     return await this.productRepository.updateProductImage(id, image)
+      //   })
+      // ) as IProductImage[]
+      const updatedProduct = await this.productRepository.updateProduct(id, product, updatedProductVariants, productCategory)
       res.status(200).json({ product: updatedProduct, message: "Product updated" })
     } catch (error) {
       console.log(error)

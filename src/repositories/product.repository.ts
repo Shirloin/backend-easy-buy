@@ -1,9 +1,5 @@
 import { IProductCategory } from "../interfaces/product-category.interface";
 import {
-  ICreateProductImage,
-  IProductImage,
-} from "../interfaces/product-image.interface";
-import {
   ICreateProductVariant,
   IProductVariant,
 } from "../interfaces/product-variant.interface";
@@ -11,7 +7,6 @@ import { ICreateProduct, IProduct } from "../interfaces/product.interface";
 import CartItem from "../models/cart-item.model";
 import Cart from "../models/cart.model";
 import ProductCategory from "../models/product-category.model";
-import ProductImage from "../models/product-image.model";
 import ProductVariant from "../models/product-variant.model";
 import Product from "../models/product.model";
 import Shop from "../models/shop.model";
@@ -21,7 +16,6 @@ export default class ProductRepository {
   private shop = Shop;
   private product = Product;
   private productVariant = ProductVariant;
-  private productImage = ProductImage;
   private productCategory = ProductCategory;
   private cart = Cart
   private cartItem = CartItem
@@ -42,7 +36,6 @@ export default class ProductRepository {
   public async createProduct(
     productData: ICreateProduct,
     productVariantData: ICreateProductVariant[],
-    productImageData: ICreateProductImage[]
   ): Promise<IProduct> {
     let category = await this.productCategory.findOne({
       name: productData.category,
@@ -68,18 +61,7 @@ export default class ProductRepository {
         }))
       );
     }
-
-    let newProductImages: IProductImage[] = [];
-    if (productImageData) {
-      newProductImages = await this.productImage.create(
-        productImageData.map((image) => ({
-          ...image,
-          product: newProduct._id,
-        }))
-      );
-    }
     newProduct.productVariants = newProductVariants;
-    newProduct.productImages = newProductImages;
     await newProduct.save();
 
     category.products.push(newProduct);
@@ -92,7 +74,6 @@ export default class ProductRepository {
     const products = await this.product.find({ shop: shopId })
       .populate([
         { path: 'productVariants' },
-        { path: 'productImages' },
         { path: 'productCategory' }
       ])
       .exec();
@@ -101,7 +82,6 @@ export default class ProductRepository {
 
   public async updateProduct(productId: string, productData: ICreateProduct,
     productVariantData: IProductVariant[],
-    productImageData: IProductImage[],
     productCategory: IProductCategory) {
     const product = await this.product.findOne({ _id: productId })
     if (!product) {
@@ -112,16 +92,9 @@ export default class ProductRepository {
       product: product.id,
       _id: { $nin: productVariantData }
     })
-
-    await this.productImage.deleteMany({
-      product: product.id,
-      _id: { $nin: productImageData }
-    })
-
     product.name = productData.name
     product.description = productData.description
     product.productVariants = productVariantData
-    product.productImages = productImageData
     product.productCategory = productCategory
     await product.save()
 
@@ -141,19 +114,6 @@ export default class ProductRepository {
     )
   }
 
-  public async updateProductImage(productId: string, image: ICreateProductImage) {
-    if (image._id) {
-      return await this.productImage.findOneAndUpdate(
-        { _id: image._id },
-        { ...image, product: productId },
-        { new: true }
-      );
-    }
-    return await this.productImage.create(
-      { ...image, product: productId }
-    )
-  }
-
   public async deleteProduct(productId: string) {
     const productVariants = await this.productVariant.find({ product: productId })
     const variantIds = productVariants.map(variant => variant._id);
@@ -165,7 +125,6 @@ export default class ProductRepository {
       { $pull: { items: { $in: deletedCartItemIds } } }
     );
     await this.productVariant.deleteMany({ product: productId })
-    await this.productImage.deleteMany({ product: productId })
     return await this.product.findOneAndDelete({ _id: productId })
   }
 
@@ -173,7 +132,6 @@ export default class ProductRepository {
     return await this.product.find()
       .populate([
         { path: 'productVariants' },
-        { path: 'productImages' },
         { path: 'productCategory' },
         { path: 'shop' }
       ])
@@ -184,7 +142,6 @@ export default class ProductRepository {
   public async getProductDetail(productId: string) {
     return await this.product.findById(productId).populate([
       { path: 'productVariants' },
-      { path: 'productImages' },
       { path: 'productCategory' },
       { path: 'shop' }
     ])

@@ -5,6 +5,7 @@ export interface IProductVariant {
   name: string;
   price: number;
   stock: number;
+  imageUrl: string;
   product: IProduct;
 }
 
@@ -13,5 +14,6 @@ export interface ICreateProductVariant {
   name: string;
   price: number;
   stock: number;
+  imageUrl: string;
   product: IProduct;
 }

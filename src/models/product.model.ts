@@ -16,12 +16,6 @@ const product_schema: Schema = new Schema({
       ref: "ProductVariant",
     },
   ],
-  productImages: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "ProductImage",
-    },
-  ],
   productCategory: {
     type: Schema.Types.ObjectId,
     ref: "ProductCategory",
