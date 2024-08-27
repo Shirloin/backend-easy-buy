@@ -44,6 +44,12 @@ const user_schema: Schema = new Schema({
       type: Schema.Types.ObjectId,
       ref: "Cart",
     }
+  ],
+  address: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Address",
+    }
   ]
 });
 

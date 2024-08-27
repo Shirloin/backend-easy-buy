@@ -1,3 +1,4 @@
+import IAddress from "./address.interface";
 import { ICart } from "./cart.interface";
 import { IShop } from "./shop.interface";
 
@@ -12,6 +13,7 @@ export interface IUser {
   phone: string;
   shop: IShop;
   carts: ICart[]
+  address: IAddress[]
 }
 
 export interface ICreateUser {
