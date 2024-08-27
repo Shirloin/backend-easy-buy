@@ -10,6 +10,7 @@ import session from "express-session";
 import ProductRoute from "./routes/product.route.ts";
 import CartRoute from "./routes/cart.route.ts";
 import TransationRoute from "./routes/transaction.route.ts";
+import AddressRoute from "./routes/address.route.ts";
 class App {
   public app: express.Application;
   public env: string;
@@ -66,6 +67,7 @@ class App {
     this.app.use("/api", new ProductRoute().router);
     this.app.use("/api", new CartRoute().router)
     this.app.use("/api", new TransationRoute().router)
+    this.app.use("/api", new AddressRoute().router)
     this.app.use(ErrorHandling);
   }
 }
