@@ -14,6 +14,20 @@ const transaction_header_schema: Schema = new Schema({
         type: Date,
         default: Date.now,
     },
+    address: {
+        receiverName: {
+            type: String
+        },
+        receiverPhone: {
+            type: String
+        },
+        addressLabel: {
+            type: String
+        },
+        street: {
+            type: String
+        }
+    },
     transactionDetails: [
         {
             type: Schema.Types.ObjectId,

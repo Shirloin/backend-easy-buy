@@ -195,4 +195,9 @@ export default class CartRepository {
     public async deleteEmptyCart() {
         await this.cart.deleteMany({ items: { $size: 0 } });
     }
+
+    public async deleteCarts(cartIds: string[]) {
+        await this.cartItem.deleteMany({ cart: { $in: cartIds } })
+        return await this.cart.deleteMany({ _id: { $in: cartIds } });
+    }
 }

@@ -15,7 +15,7 @@ export default class TransactionController {
         next: NextFunction) => {
         try {
             const sessionUser = (req.session as any).user;
-            const user = await this.userRepository.getUserById(sessionUser.id);
+            let user = await this.userRepository.getUserById(sessionUser.id);
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
@@ -39,6 +39,9 @@ export default class TransactionController {
                 await transactionHeader.save();
                 transactions.push(transactionHeader);
             }
+            const deletedCarts = await this.cartRepository.deleteCarts(cartIds)
+            user = await this.userRepository.removeCartFromUser(user._id, cartIds)
+
             return res.status(200).json({ transactions: transactions, message: "Transaction has successfully been made" })
         } catch (error) {
             console.log(error);

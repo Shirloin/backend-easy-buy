@@ -5,8 +5,8 @@ export interface IAddress {
     receiverName: string
     receiverPhone: string
     addressLabel: string
-    address: string
-    user: IUser
+    street: string
+    user?: IUser
 }
 
 export interface ICreateAddress {

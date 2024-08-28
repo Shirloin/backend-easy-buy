@@ -41,6 +41,14 @@ class UserRepository {
     return await this.user.findOneAndUpdate({ _id: userId }, update, { new: true })
   }
 
+  public async removeCartFromUser(userId: string, cartIds: string[]) {
+    return await User.findByIdAndUpdate(
+      userId,
+      { $pull: { carts: { $in: cartIds } } },
+      { new: true }
+    );
+  }
+
 }
 
 export default UserRepository;

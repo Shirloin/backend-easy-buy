@@ -14,14 +14,15 @@ const address_schema: Schema = new Schema({
         type: String,
         required: true
     },
-    address: {
+    street: {
         type: String,
         required: true
     },
     user: {
         type: Schema.Types.ObjectId,
         ref: "User"
-    }
+    },
+
 })
 
 const Address = model<IAddress & Document>("Address", address_schema);
