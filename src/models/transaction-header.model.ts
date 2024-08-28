@@ -28,7 +28,7 @@ const transaction_header_schema: Schema = new Schema({
             type: String
         }
     },
-    transactionDetails: [
+    details: [
         {
             type: Schema.Types.ObjectId,
             ref: "TransactionDetail",

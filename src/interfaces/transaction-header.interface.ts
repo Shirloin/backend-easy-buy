@@ -9,5 +9,5 @@ export default interface ITransactionHeader {
     address: IAddress
     user: IUser
     shop: IShop
-    transactionDetails: ITransactionDetail[]
+    details: ITransactionDetail[]
 }

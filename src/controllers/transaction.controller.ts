@@ -4,11 +4,13 @@ import UserRepository from "../repositories/user.repository";
 import { ICart } from "../interfaces/cart.interface";
 import ITransactionHeader from "../interfaces/transaction-header.interface";
 import CartRepository from "../repositories/cart.repository";
+import ShopRepository from "../repositories/shop.repository";
 
 export default class TransactionController {
-    public transactionRepository = TransactionRepository.getInstance()
-    public userRepository = UserRepository.getInstance();
-    public cartRepository = CartRepository.getInstance();
+    private transactionRepository = TransactionRepository.getInstance()
+    private userRepository = UserRepository.getInstance();
+    private cartRepository = CartRepository.getInstance();
+    private shopRepository = ShopRepository.getInstance()
 
     public createTransaction = async (req: Request,
         res: Response,
@@ -33,7 +35,7 @@ export default class TransactionController {
 
                 for (const item of cart.items) {
                     const transactionDetail = await this.transactionRepository.createTransactionDetail(item.quantity, item.variant.product, item.variant);
-                    transactionHeader.transactionDetails.push(transactionDetail);
+                    transactionHeader.details.push(transactionDetail);
                 }
 
                 await transactionHeader.save();
@@ -46,6 +48,23 @@ export default class TransactionController {
         } catch (error) {
             console.log(error);
             next(error)
+        }
+    }
+
+    public getTransactionByShop = async (req: Request,
+        res: Response,
+        next: NextFunction) => {
+        try {
+            const sessionUser = (req.session as any).user;
+            let user = await this.userRepository.getUserById(sessionUser.id);
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            const transactions = await this.transactionRepository.getTransactionByShop(user.shop._id)
+
+            return res.status(200).json({ transactions: transactions })
+        } catch (error) {
+
         }
     }
 }

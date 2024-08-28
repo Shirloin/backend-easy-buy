@@ -5,7 +5,7 @@ const transaction_detail_schema: Schema = new Schema({
     quantity: {
         type: Number,
     },
-    transactionHeader: {
+    transaction: {
         type: Schema.Types.ObjectId,
         ref: "TransactionHeader"
     },
@@ -13,7 +13,7 @@ const transaction_detail_schema: Schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Product",
     },
-    productVariant: {
+    variant: {
         type: Schema.Types.ObjectId,
         ref: "ProductVariant",
     },

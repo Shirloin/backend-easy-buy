@@ -30,6 +30,12 @@ const shop_schema: Schema = new Schema({
       ref: "Product",
     },
   ],
+  transactions: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "TransactionHeader",
+    },
+  ]
 });
 
 const Shop = model<IShop & Document>("Shop", shop_schema);

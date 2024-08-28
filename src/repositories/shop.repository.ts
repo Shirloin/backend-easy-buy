@@ -44,5 +44,7 @@ class ShopRepository {
       { $pull: { products: productId } }
     );
   }
+
+
 }
 export default ShopRepository;

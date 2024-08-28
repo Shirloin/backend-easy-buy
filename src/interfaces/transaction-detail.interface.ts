@@ -5,7 +5,7 @@ import ITransactionHeader from "./transaction-header.interface"
 export default interface ITransactionDetail {
     _id: string
     quantity: number
-    transactionHeader: ITransactionHeader
+    transaction: ITransactionHeader
     product: IProduct
-    productVariant: IProductVariant
+    variant: IProductVariant
 }

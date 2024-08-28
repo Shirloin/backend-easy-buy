@@ -1,4 +1,5 @@
 import { IProduct } from "./product.interface";
+import ITransactionHeader from "./transaction-header.interface";
 import { IUser } from "./user.interface";
 
 export interface IShop {
@@ -9,6 +10,7 @@ export interface IShop {
   imageUrl: string;
   user: IUser;
   products: IProduct[];
+  transactions: ITransactionHeader[]
 }
 
 export interface ICreateShop {

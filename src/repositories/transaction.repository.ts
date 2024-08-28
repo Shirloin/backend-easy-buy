@@ -23,16 +23,30 @@ export default class TransactionRepository {
     }
     public async createTransactionHeader(userId: string, shopId: string) {
         return await this.transactionHeader.create({
-            userId: userId,
-            shopId: shopId,
+            user: userId,
+            shop: shopId,
         })
     }
 
-    public async createTransactionDetail(quantity: number, product: IProduct, productVariant: IProductVariant) {
+    public async createTransactionDetail(quantity: number, product: IProduct, variant: IProductVariant) {
         return await this.transactionDetail.create({
             quantity: quantity,
             product: product,
-            productVariant: productVariant
+            variant: variant
         })
     }
+
+    public async getTransactionByShop(shopId: string) {
+        return await this.transactionHeader.find({ shop: shopId }).populate([
+            {
+                path: "details", populate: [
+                    { path: "product" },
+                    { path: "variant" },
+                ]
+            },
+            { path: "shop" }
+        ]
+        )
+    }
+
 }

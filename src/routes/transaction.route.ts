@@ -10,7 +10,7 @@ export default class TransationRoute implements Routes {
         this.initializeRoutes()
     }
     private initializeRoutes() {
-        // this.router.get("/transaction", authMiddleware)
+        this.router.get("/transaction/shop", authMiddleware, this.transactionController.getTransactionByShop)
         this.router.post("/transaction", authMiddleware, this.transactionController.createTransaction)
     }
 }
