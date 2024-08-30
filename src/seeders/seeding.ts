@@ -56,7 +56,7 @@ const createShop = async (userId: string, categories: IProductCategory[]) => {
         name: faker.company.name(),
         description: faker.company.catchPhrase(),
         bannerUrl: faker.image.url(),
-        imageUrl: faker.image.avatar(),
+        imageUrl: faker.image.url(),
         user: userId,
         products: [],
     });
@@ -84,7 +84,7 @@ const createUser = async (username: string, categories: IProductCategory[]) => {
         password: hashedPassword,
         dob: faker.date.past({ years: 30, refDate: new Date(2000, 0, 1) }),
         gender: faker.person.sex(),
-        imageUrl: faker.image.avatar(),
+        imageUrl: faker.image.url(),
         phone: faker.phone.number(),
     });
 
