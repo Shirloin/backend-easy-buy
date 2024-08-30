@@ -11,3 +11,9 @@ export interface IChat extends Document {
     createdAt: Date
     updatedAt: Date
 }
+
+export interface ICreateChat {
+    text: string
+    sender: IUser | IShop
+    chatRoom: IChatRoom
+}

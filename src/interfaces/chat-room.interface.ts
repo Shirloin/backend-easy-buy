@@ -9,3 +9,8 @@ export interface IChatRoom extends Document {
     shop: IShop
     chat: IChat
 }
+
+export interface ICreateChatRoom {
+    user: IUser
+    shop: IShop
+}

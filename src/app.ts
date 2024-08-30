@@ -11,23 +11,30 @@ import ProductRoute from "./routes/product.route.ts";
 import CartRoute from "./routes/cart.route.ts";
 import TransationRoute from "./routes/transaction.route.ts";
 import AddressRoute from "./routes/address.route.ts";
+import { createServer } from "http";
+import { Websocket } from "./websocket/websocket.ts";
+import ChatSocket from "./websocket/chat.socket.ts";
 class App {
   public app: express.Application;
   public env: string;
   public port: string | number;
+  public ws: string | number;
+  private httpServer: any
 
   constructor() {
     this.app = express();
     this.env = "development";
     this.port = 3000;
+    this.ws = 5000;
 
     this.connectToDatabase();
     this.initializeMiddlewares();
     this.initializeRoutes();
+    this.initializeWebsocket()
   }
 
   public listen() {
-    this.app.listen(this.port, () => {
+    this.httpServer.listen(this.port, () => {
       console.info(`=================================`);
       console.info(`======= ENV: ${this.env} =======`);
       console.info(`🚀 App listening on the port ${this.port}`);
@@ -69,6 +76,13 @@ class App {
     this.app.use("/api", new TransationRoute().router)
     this.app.use("/api", new AddressRoute().router)
     this.app.use(ErrorHandling);
+  }
+
+  private initializeWebsocket() {
+    this.httpServer = createServer(this.app)
+    const io = Websocket.getInstance(this.httpServer)
+    io.listen(4000)
+    const chatSocket = new ChatSocket(io)
   }
 }
 
