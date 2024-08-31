@@ -7,10 +7,10 @@ export interface IChatRoom extends Document {
     _id: string
     user: IUser
     shop: IShop
-    chat: IChat
+    chats: IChat[]
 }
 
 export interface ICreateChatRoom {
-    user: IUser
-    shop: IShop
+    userId: string
+    shopId: string
 }

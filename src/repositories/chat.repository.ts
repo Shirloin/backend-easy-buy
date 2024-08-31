@@ -20,18 +20,17 @@ export default class ChatRepository {
         }
         return ChatRepository.instance
     }
-
-    public async getChatRoomByUser(userId: string) {
-        return await this.chatRoom.findOne({ user: userId })
-    }
-    public async getChatRoomByShop(shopId: string) {
-        return await this.chatRoom.findOne({ shop: shopId })
-    }
     public async getAllUserChatRoom(userId: string) {
-        return await this.chatRoom.find({ user: userId })
+        return await this.chatRoom.find({ user: userId }).populate([
+            { path: "user" },
+            { path: "room" }
+        ])
     }
     public async getAllShopChatRoom(shopId: string) {
-        return await this.chatRoom.find({ shop: shopId })
+        return await this.chatRoom.find({ shop: shopId }).populate([
+            { path: "user" },
+            { path: "room" }
+        ])
     }
     public async createChatRoom(chatRoom: ICreateChatRoom) {
         return await this.chatRoom.create(chatRoom)
@@ -42,5 +41,9 @@ export default class ChatRepository {
     }
     public async getChatByRoom(chatRoomId: string) {
         return await this.chat.find({ chatRoom: chatRoomId })
+    }
+
+    public async getRoom(userId: string, shopId: string) {
+        return await this.chatRoom.findOne({ user: userId, shop: shopId })
     }
 }

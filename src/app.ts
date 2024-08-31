@@ -14,6 +14,7 @@ import AddressRoute from "./routes/address.route.ts";
 import { createServer } from "http";
 import { Websocket } from "./websocket/websocket.ts";
 import ChatSocket from "./websocket/chat.socket.ts";
+import ChatRoute from "./routes/chat.route.ts";
 class App {
   public app: express.Application;
   public env: string;
@@ -75,6 +76,7 @@ class App {
     this.app.use("/api", new CartRoute().router)
     this.app.use("/api", new TransationRoute().router)
     this.app.use("/api", new AddressRoute().router)
+    this.app.use("/api", new ChatRoute().router)
     this.app.use(ErrorHandling);
   }
 
