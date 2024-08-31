@@ -23,17 +23,17 @@ export default class ChatRepository {
     public async getAllUserChatRoom(userId: string) {
         return await this.chatRoom.find({ user: userId }).populate([
             { path: "user" },
-            { path: "room" }
+            { path: "shop" }
         ])
     }
     public async getAllShopChatRoom(shopId: string) {
         return await this.chatRoom.find({ shop: shopId }).populate([
             { path: "user" },
-            { path: "room" }
+            { path: "shop" }
         ])
     }
-    public async createChatRoom(chatRoom: ICreateChatRoom) {
-        return await this.chatRoom.create(chatRoom)
+    public async createChatRoom(shopId: string, userId: string) {
+        return await this.chatRoom.create({ shop: shopId, user: userId })
     }
 
     public async createChat(chat: ICreateChat) {

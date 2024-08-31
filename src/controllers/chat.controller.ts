@@ -19,6 +19,7 @@ export default class ChatController {
                 return res.status(404).json({ message: "User not found" });
             }
             const chatRooms = await this.chatRepository.getAllUserChatRoom(user._id)
+            console.log(chatRooms)
             return res.status(200).json({ chatRooms: chatRooms })
         } catch (error) {
             console.log(error)
@@ -51,11 +52,11 @@ export default class ChatController {
                 return res.status(404).json({ message: "User not found" });
             }
             const { shopId } = req.body
-            const createChatRoom: ICreateChatRoom = {
-                shopId: shopId,
-                userId: user._id
+            console.log(shopId)
+            let chatRoom = await this.chatRepository.getRoom(user._id, shopId)
+            if (!chatRoom) {
+                chatRoom = await this.chatRepository.createChatRoom(shopId, user._id)
             }
-            const chatRoom = await this.chatRepository.createChatRoom(createChatRoom)
             return res.status(200).json({ chatRoom: chatRoom })
         } catch (error) {
             console.log(error)
@@ -73,7 +74,10 @@ export default class ChatController {
                 return res.status(404).json({ message: "User not found" });
             }
             const { shopId } = req.body
-            const chatRoom = await this.chatRepository.getRoom(user._id, shopId)
+            let chatRoom = await this.chatRepository.getRoom(user._id, shopId)
+            if (!chatRoom) {
+                chatRoom = await this.chatRepository.createChatRoom(shopId, user._id)
+            }
             return res.status(200).json({ chatRoom: chatRoom })
         } catch (error) {
             console.log(error)
