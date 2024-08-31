@@ -1,4 +1,4 @@
-import IAddress from "./address.interface";
+import { IAddress } from "./address.interface";
 import { ICart } from "./cart.interface";
 import { IShop } from "./shop.interface";
 

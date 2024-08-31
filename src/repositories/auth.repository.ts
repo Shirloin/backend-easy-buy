@@ -5,10 +5,10 @@ import bcrypt from "bcryptjs";
 class AuthRepository {
   public user = User;
 
-  public async register(user_data: ICreateUser): Promise<IUser> {
-    const hashedPassword = await bcrypt.hash(user_data.password, 10);
+  public async register(userData: ICreateUser): Promise<IUser> {
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
     const newUser: IUser = await this.user.create({
-      ...user_data,
+      ...userData,
       password: hashedPassword,
     });
     return newUser;

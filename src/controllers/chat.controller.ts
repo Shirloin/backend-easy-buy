@@ -64,7 +64,7 @@ export default class ChatController {
         }
     }
 
-    public getRoom = async (req: Request,
+    public getChat = async (req: Request,
         res: Response,
         next: NextFunction) => {
         try {
@@ -73,15 +73,13 @@ export default class ChatController {
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
-            const { shopId } = req.body
-            let chatRoom = await this.chatRepository.getRoom(user._id, shopId)
-            if (!chatRoom) {
-                chatRoom = await this.chatRepository.createChatRoom(shopId, user._id)
-            }
-            return res.status(200).json({ chatRoom: chatRoom })
+            const { chatRoomId } = req.body
+            const chats = await this.chatRepository.getChat(chatRoomId)
+            return res.status(200).json({ chats: chats })
         } catch (error) {
             console.log(error)
             next(error)
         }
     }
+
 }

@@ -7,9 +7,9 @@ const chat_schema: Schema = new Schema({
     },
     sender: {
         type: Schema.Types.ObjectId,
-        refPath: "senderType"
+        refPath: "type"
     },
-    senderType: {
+    type: {
         type: String,
         enum: ["User", "Shop"]
     },

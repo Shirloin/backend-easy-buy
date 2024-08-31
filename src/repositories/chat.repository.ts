@@ -39,8 +39,10 @@ export default class ChatRepository {
     public async createChat(chat: ICreateChat) {
         return await this.chat.create(chat)
     }
-    public async getChatByRoom(chatRoomId: string) {
-        return await this.chat.find({ chatRoom: chatRoomId })
+    public async getChat(chatRoomId: string) {
+        return await this.chat.find({ chatRoom: chatRoomId }).populate([
+            { path: "sender" }
+        ])
     }
 
     public async getRoom(userId: string, shopId: string) {
