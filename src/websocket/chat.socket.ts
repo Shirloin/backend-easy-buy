@@ -21,11 +21,14 @@ export default class ChatSocket {
 
             socket.on("send_message", (data) => {
                 console.log(`Message received: ${data.message} in room: ${data.room} : ${socket.id}`);
-                socket.to(data.room).emit("receive_message", data.message);
+                io.to(data.room).emit("receive_message", data.message);
             });
 
             socket.on('disconnect', () => {
                 console.log('🔥: A user disconnected');
+            });
+            socket.on("error", (error) => {
+                console.error("Socket error:", error);
             });
         })
     }

@@ -81,7 +81,6 @@ class App {
   private initializeWebsocket() {
     this.httpServer = createServer(this.app)
     const io = Websocket.getInstance(this.httpServer)
-    io.listen(4000)
     const chatSocket = new ChatSocket(io)
   }
 }

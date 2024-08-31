@@ -3,7 +3,6 @@ import { Server } from "socket.io";
 
 const WEBSOCKET_CORS = {
     origin: "*",
-    methods: ["GET", "POST"]
 }
 export class Websocket extends Server {
     private static io: Websocket
