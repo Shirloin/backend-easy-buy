@@ -29,9 +29,9 @@ class App {
     this.ws = 5000;
 
     this.connectToDatabase();
+    this.initializeWebsocket()
     this.initializeMiddlewares();
     this.initializeRoutes();
-    this.initializeWebsocket()
   }
 
   public listen() {
@@ -82,8 +82,8 @@ class App {
 
   private initializeWebsocket() {
     this.httpServer = createServer(this.app)
-    const io = Websocket.getInstance(this.httpServer)
-    const chatSocket = new ChatSocket(io)
+    Websocket.getInstance(this.httpServer);
+    new ChatSocket()
   }
 }
 

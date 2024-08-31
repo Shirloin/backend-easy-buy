@@ -7,6 +7,7 @@ export interface IChat extends Document {
     _id: string
     text: string
     sender: IUser | IShop
+    type: "User" | "Shop"
     chatRoom: IChatRoom
     createdAt: Date
     updatedAt: Date
@@ -14,6 +15,7 @@ export interface IChat extends Document {
 
 export interface ICreateChat {
     text: string
-    sender: IUser | IShop
-    chatRoom: IChatRoom
+    sender: string
+    type: "User" | "Shop"
+    chatRoom: string
 }

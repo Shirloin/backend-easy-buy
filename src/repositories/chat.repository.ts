@@ -1,5 +1,6 @@
+import { Document } from "mongoose"
 import { ICreateChatRoom } from "../interfaces/chat-room.interface"
-import { ICreateChat } from "../interfaces/chat.interface"
+import { IChat, ICreateChat } from "../interfaces/chat.interface"
 import ChatRoom from "../models/chat-room.model"
 import Chat from "../models/chat.model"
 
@@ -40,9 +41,8 @@ export default class ChatRepository {
         return await this.chat.create(chat)
     }
     public async getChat(chatRoomId: string) {
-        return await this.chat.find({ chatRoom: chatRoomId }).populate([
-            { path: "sender" }
-        ])
+        const chats = await this.chat.find({ chatRoom: chatRoomId }).populate({ path: "sender" }).exec();
+        return chats
     }
 
     public async getRoom(userId: string, shopId: string) {

@@ -1,13 +1,16 @@
+import ChatController from "../controllers/chat.controller";
 import { Websocket } from "./websocket";
 
 
 export default class ChatSocket {
 
-    constructor(io: Websocket) {
-        this.connect(io)
+    private chatController = new ChatController()
+    private io = Websocket.getInstance()
+    constructor() {
+        this.connect()
     }
-    private connect(io: Websocket) {
-        io.on("connection", (socket) => {
+    private connect() {
+        this.io.on("connection", (socket) => {
             console.log('user is connected: ', socket.id)
             socket.on("join_room", (room) => {
                 console.log(`User joined room: ${room}: ${socket.id}`);
@@ -17,11 +20,6 @@ export default class ChatSocket {
             socket.on("leave_room", (room) => {
                 console.log(`User left room: ${room}`);
                 socket.leave(room);
-            });
-
-            socket.on("send_message", (data) => {
-                console.log(`Message received: ${data.message} in room: ${data.room} : ${socket.id}`);
-                io.to(data.room).emit("receive_message", data.message);
             });
 
             socket.on('disconnect', () => {

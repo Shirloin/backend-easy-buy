@@ -13,7 +13,7 @@ const chat_schema: Schema = new Schema({
         type: String,
         enum: ["User", "Shop"]
     },
-    ChatRoom: {
+    chatRoom: {
         type: Schema.Types.ObjectId,
         ref: "ChatRoom"
     },

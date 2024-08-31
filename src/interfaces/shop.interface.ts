@@ -1,8 +1,9 @@
+import { Document } from "mongoose";
 import { IProduct } from "./product.interface";
 import ITransactionHeader from "./transaction-header.interface";
 import { IUser } from "./user.interface";
 
-export interface IShop {
+export interface IShop extends Document {
   _id: string;
   name: string;
   description: string;

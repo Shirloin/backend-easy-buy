@@ -12,7 +12,9 @@ export default class ChatRoute implements Routes {
     }
     private initializeRoutes() {
         this.router.get("/user-chat-room", authMiddleware, this.chatController.getAllUserChatRoom)
+        this.router.get("/shop-chat-room", authMiddleware, this.chatController.getAllShopChatRoom)
         this.router.post("/chat-room", authMiddleware, this.chatController.createChatRoom)
-        this.router.get("/chat", authMiddleware, this.chatController.getChat)
+        this.router.get("/chat/:chatRoomId", authMiddleware, this.chatController.getChat)
+        this.router.post("/chat", authMiddleware, this.chatController.createChat)
     }
 }
