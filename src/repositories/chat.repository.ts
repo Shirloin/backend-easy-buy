@@ -34,11 +34,11 @@ export default class ChatRepository {
         ])
     }
     public async createChatRoom(shopId: string, userId: string) {
-        return await this.chatRoom.create({ shop: shopId, user: userId })
+        return (await this.chatRoom.create({ shop: shopId, user: userId })).populate([{ path: "user" }, { path: "shop" }])
     }
 
     public async createChat(chat: ICreateChat) {
-        return await this.chat.create(chat)
+        return (await this.chat.create(chat)).populate({ path: "sender" })
     }
     public async getChat(chatRoomId: string) {
         const chats = await this.chat.find({ chatRoom: chatRoomId }).populate({ path: "sender" }).exec();
@@ -46,6 +46,6 @@ export default class ChatRepository {
     }
 
     public async getRoom(userId: string, shopId: string) {
-        return await this.chatRoom.findOne({ user: userId, shop: shopId })
+        return await this.chatRoom.findOne({ user: userId, shop: shopId }).populate([{ path: "user" }, { path: "shop" }])
     }
 }

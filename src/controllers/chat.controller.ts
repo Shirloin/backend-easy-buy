@@ -77,7 +77,6 @@ export default class ChatController {
             }
             const { chatRoomId } = req.params
             const chats = await this.chatRepository.getChat(chatRoomId)
-            console.log(chats)
             return res.status(200).json({ chats: chats })
         } catch (error) {
             console.log(error)
