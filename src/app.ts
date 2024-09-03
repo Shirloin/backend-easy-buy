@@ -25,7 +25,7 @@ class App {
   constructor() {
     this.app = express();
     this.env = "development";
-    this.port = 3000;
+    this.port = 8000;
     this.ws = 5000;
 
     this.connectToDatabase();
