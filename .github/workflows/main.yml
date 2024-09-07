@@ -56,6 +56,6 @@ jobs:
           script: |
             cd backend-easy-buy
             git checkout origin/main -- docker-compose.prod.yml
-            git checkout origin/main -- start.dev.sh
+            git checkout origin/main -- start.prod.sh
             docker pull ${{secrets.DOCKERHUB_USERNAME}}/backend-easy-buy:latest
             docker-compose -f docker-compose.prod.yml up -d
