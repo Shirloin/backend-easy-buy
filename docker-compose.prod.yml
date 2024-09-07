@@ -23,17 +23,6 @@ services:
       start_period: 30s
       timeout: 5s
 
-  nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-    depends_on:
-      - api
-    networks:
-      - network
-
   mongodb:
     image: mongo:latest
     container_name: easy-buy-db
