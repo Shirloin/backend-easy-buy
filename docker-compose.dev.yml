@@ -5,6 +5,7 @@ services:
     container_name: easy-buy-api
     build:
       context: .
+      dockerfile: Dockerfile.dev
       target: build
     ports:
       - 6543:6543
