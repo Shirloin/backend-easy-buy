@@ -12,6 +12,10 @@ export default class ChatSocket {
     private connect() {
         this.io.on("connection", (socket) => {
             console.log('user is connected: ', socket.id)
+
+            socket.on("connect_error", (error) => {
+                console.error("WebSocket connection error:", error);
+            });
             socket.on("join_room", (room) => {
                 console.log(`User joined room: ${room}: ${socket.id}`);
                 socket.join(room);
