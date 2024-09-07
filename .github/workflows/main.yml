@@ -40,23 +40,11 @@ jobs:
       - #Build the container image and push it to Docker Hub with name backend-easy-buy
         name: Build and push
         uses: docker/build-push-action@v4
-
-      - #Build Dev Image
-        name: Build Development Image
-        run: |
-          docker-compose -f docker-compose.dev.yml build
-
-      - # Build and Push Prod Image
-        name: Build and Push Production Image
-        run: |
-          # Build the production image
-          docker-compose -f docker-compose.prod.yml build
-
-          # Tag the production image
-          docker tag easy-buy-backend:latest ${{ secrets.DOCKERHUB_USERNAME }}/backend-easy-buy:latest
-
-          # Push the production image to Docker Hub
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend-easy-buy:latest
+        with:
+          context: .
+          file: ./Dockerfile.prod
+          push: true
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/backend-easy-buy:latest
 
       - #Deploy To VPS
         name: Deploy to VPS
