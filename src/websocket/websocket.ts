@@ -5,6 +5,7 @@ import { NODE_ENV, ORIGIN } from "../config";
 
 const WEBSOCKET_CORS = {
     origin: NODE_ENV === "production" ? ORIGIN : "*",
+    methods: ["GET", "POST"],
 }
 export class Websocket extends Server {
     private static io: Websocket
