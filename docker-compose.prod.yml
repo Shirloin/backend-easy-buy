@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   api:
-    image: riccardo006/easy-buy-backend:latest
+    image: riccardo006/backend-easy-buy:latest
     container_name: easy-buy-api
     # build:
     #   context: .
