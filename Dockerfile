@@ -20,4 +20,8 @@ RUN npm ci --only=production
 
 COPY --from=build /app/dist ./dist
 
-CMD ["node", "dist/index.js"]
+COPY start.sh ./
+
+RUN chmod +x start.sh
+
+CMD ["./start.sh"]

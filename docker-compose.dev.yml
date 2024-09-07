@@ -1,21 +1,17 @@
 version: "3.8"
 services:
   api:
-    image: easy-buy-backend:latest
+    image: riccardo006/easy-buy-backend:latest
     container_name: easy-buy-api
-    build:
-      context: .
-      target: build
-    # volumes:
-    #   - ./:/app
-    #   - /app/node_modules
     ports:
       - 6543:6543
-    command: npm run dev
     depends_on:
       - mongodb
     networks:
       - network
+    volumes:
+      - ./start.sh:/app/start.sh
+    command: ./start.sh
 
     healthcheck:
       test: ["CMD", "nc", "-z", "mongodb", "27017"]

@@ -56,4 +56,4 @@ jobs:
           script: |
             cd backend-easy-buy
             docker pull ${{secrets.DOCKERHUB_USERNAME}}/backend-easy-buy:latest
-            docker-compose -f up -d
+            docker-compose up -d
