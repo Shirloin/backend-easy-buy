@@ -1,19 +1,20 @@
 FROM node:18-alpine
 
+RUN apk add --no-cache nginx
+
 WORKDIR /app
 
 COPY package*.json ./
-
 RUN npm ci
-
-RUN npm install
-
 COPY . .
-
 RUN npm run build
 
-COPY start.prod.sh ./
+COPY nginx.conf /etc/nginx/nginx.conf
+RUN mkdir -p /run/nginx
 
+COPY start.prod.sh ./
 RUN chmod +x start.prod.sh
 
-CMD ["./start.prod.sh"]
+EXPOSE 80
+
+CMD ["sh", "-c", "nginx && ./start.prod.sh"]
