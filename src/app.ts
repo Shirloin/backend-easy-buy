@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import { connect, set } from "mongoose";
 import { dbConnection } from "./database/index.ts";
-import { ORIGIN, CREDENTIALS, SECRET_KEY } from "./config/index.ts";
+import { ORIGIN, CREDENTIALS, SECRET_KEY, NODE_ENV, PORT } from "./config/index.ts";
 import AuthRoute from "./routes/auth.route.ts";
 import ErrorHandling from "./error/index.ts";
 import ShopRoute from "./routes/shop.route.ts";
@@ -11,7 +11,8 @@ import ProductRoute from "./routes/product.route.ts";
 import CartRoute from "./routes/cart.route.ts";
 import TransationRoute from "./routes/transaction.route.ts";
 import AddressRoute from "./routes/address.route.ts";
-import { createServer } from "http";
+import { createServer as createHttpServer } from "http";
+import { createServer as createHttpsServer } from "https";
 import { Websocket } from "./websocket/websocket.ts";
 import ChatSocket from "./websocket/chat.socket.ts";
 import ChatRoute from "./routes/chat.route.ts";
@@ -19,14 +20,12 @@ class App {
   public app: express.Application;
   public env: string;
   public port: string | number;
-  public ws: string | number;
-  private httpServer: any
+  private server: any
 
   constructor() {
     this.app = express();
-    this.env = "development";
-    this.port = 8000;
-    this.ws = 5000;
+    this.env = NODE_ENV || "development";
+    this.port = PORT || "5432";
 
     this.connectToDatabase();
     this.initializeWebsocket()
@@ -35,7 +34,7 @@ class App {
   }
 
   public listen() {
-    this.httpServer.listen(this.port, () => {
+    this.server.listen(this.port, () => {
       console.info(`=================================`);
       console.info(`======= ENV: ${this.env} =======`);
       console.info(`🚀 App listening on the port ${this.port}`);
@@ -81,8 +80,13 @@ class App {
   }
 
   private initializeWebsocket() {
-    this.httpServer = createServer(this.app)
-    Websocket.getInstance(this.httpServer);
+    if (this.env === "production") {
+      this.server = createHttpsServer(this.app)
+    }
+    else {
+      this.server = createHttpServer(this.app)
+    }
+    Websocket.getInstance(this.server);
     new ChatSocket()
   }
 }

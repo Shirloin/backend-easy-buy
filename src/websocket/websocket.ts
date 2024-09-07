@@ -1,21 +1,23 @@
 import { Server as HttpServer } from "http";
+import { Server as HttpsServer } from "https";
 import { Server } from "socket.io";
+import { NODE_ENV, ORIGIN } from "../config";
 
 const WEBSOCKET_CORS = {
-    origin: "*",
+    origin: NODE_ENV === "production" ? ORIGIN : "*",
 }
 export class Websocket extends Server {
     private static io: Websocket
 
-    constructor(httpServer: HttpServer) {
-        super(httpServer, {
+    constructor(server: HttpServer | HttpsServer) {
+        super(server, {
             cors: WEBSOCKET_CORS
         })
     }
 
-    public static getInstance(httpServer?: HttpServer): Websocket {
-        if (!Websocket.io && httpServer) {
-            Websocket.io = new Websocket(httpServer)
+    public static getInstance(server?: HttpServer | HttpsServer): Websocket {
+        if (!Websocket.io && server) {
+            Websocket.io = new Websocket(server)
         }
         return Websocket.io
     }

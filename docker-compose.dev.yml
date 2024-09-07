@@ -1,16 +1,16 @@
 version: "3.8"
 services:
   api:
-    image: easy-buy:latest
+    image: easy-buy-backend:latest
     container_name: easy-buy-api
     build:
       context: .
       target: build
-    volumes:
-      - ./:/app
-      - /app/node_modules
+    # volumes:
+    #   - ./:/app
+    #   - /app/node_modules
     ports:
-      - 8000:8000
+      - 6543:6543
     command: npm run dev
     depends_on:
       - mongodb
