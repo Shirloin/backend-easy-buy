@@ -32,7 +32,7 @@ services:
     depends_on:
       - node-app
     networks:
-      - app-network
+      - network
 
   mongodb:
     image: mongo:latest
