@@ -13,4 +13,5 @@ npm run seed
 
 echo "Seeding completed. Starting the application..."
 
-node dist/index.js
+echo "Starting the application..."
+node dist/app.js

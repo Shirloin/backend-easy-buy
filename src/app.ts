@@ -1,21 +1,21 @@
 import express from "express";
 import cors from "cors";
 import { connect, set } from "mongoose";
-import { dbConnection } from "./database/index.ts";
-import { ORIGIN, CREDENTIALS, SECRET_KEY, NODE_ENV, PORT } from "./config/index.ts";
-import AuthRoute from "./routes/auth.route.ts";
-import ErrorHandling from "./error/index.ts";
-import ShopRoute from "./routes/shop.route.ts";
+import { dbConnection } from "./database/index";
+import { ORIGIN, CREDENTIALS, SECRET_KEY, NODE_ENV, PORT } from "./config/index";
+import AuthRoute from "./routes/auth.route";
+import ErrorHandling from "./error/index";
+import ShopRoute from "./routes/shop.route";
 import session from "express-session";
-import ProductRoute from "./routes/product.route.ts";
-import CartRoute from "./routes/cart.route.ts";
-import TransationRoute from "./routes/transaction.route.ts";
-import AddressRoute from "./routes/address.route.ts";
+import ProductRoute from "./routes/product.route";
+import CartRoute from "./routes/cart.route";
+import TransationRoute from "./routes/transaction.route";
+import AddressRoute from "./routes/address.route";
 import { createServer as createHttpServer } from "http";
 import { createServer as createHttpsServer } from "https";
-import { Websocket } from "./websocket/websocket.ts";
-import ChatSocket from "./websocket/chat.socket.ts";
-import ChatRoute from "./routes/chat.route.ts";
+import { Websocket } from "./websocket/websocket";
+import ChatSocket from "./websocket/chat.socket";
+import ChatRoute from "./routes/chat.route";
 class App {
   public app: express.Application;
   public env: string;
@@ -25,7 +25,7 @@ class App {
   constructor() {
     this.app = express();
     this.env = NODE_ENV || "development";
-    this.port = PORT || "5432";
+    this.port = PORT || "6543";
 
     this.connectToDatabase();
     this.initializeWebsocket()

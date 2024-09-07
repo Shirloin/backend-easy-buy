@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { Routes } from "../interfaces/auth.interface.ts";
-import AuthController from "../controllers/auth.controller.ts";
+import { Routes } from "../interfaces/auth.interface";
+import AuthController from "../controllers/auth.controller";
 import {
   ValidateUserLogin,
   ValidateUserRegister,
-} from "../validators/auth.validator.ts";
+} from "../validators/auth.validator";
 
 class AuthRoute implements Routes {
   public router = Router();

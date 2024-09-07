@@ -1,9 +1,36 @@
-version: "3.7"
+version: "3.8"
 services:
   api:
+    # image: easy-buy-backend:latest
+    container_name: easy-buy-api
     build:
       context: .
       target: production
-
     ports:
-      - 3000:3000
+      - 6543:6543
+    depends_on:
+      - mongodb
+    networks:
+      - network
+    volumes:
+      - ./start.sh:/app/start.sh
+    command: ./start.prod.sh
+
+    healthcheck:
+      test: ["CMD", "nc", "-z", "mongodb", "27017"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+
+  mongodb:
+    image: mongo:latest
+    container_name: easy-buy-db
+    ports:
+      - "27017:27017"
+    networks:
+      - network
+
+networks:
+  network:
+    driver: bridge

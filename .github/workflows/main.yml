@@ -55,5 +55,7 @@ jobs:
           password: ${{secrets.VPS_PASSWORD}}
           script: |
             cd backend-easy-buy
+            git checkout origin/main -- docker-compose.prod.yml
+            git checkout origin/main -- start.sh
             docker pull ${{secrets.DOCKERHUB_USERNAME}}/backend-easy-buy:latest
-            docker-compose up -d
+            docker-compose -f docker-compose.prod.yml up -d

@@ -1,5 +1,5 @@
-import { ICreateUser, IUser } from "../interfaces/user.interface.ts";
-import User from "../models/user.model.ts";
+import { ICreateUser, IUser } from "../interfaces/user.interface";
+import User from "../models/user.model";
 import bcrypt from "bcryptjs";
 
 class AuthRepository {

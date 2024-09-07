@@ -1,10 +1,10 @@
 import { CookieOptions, NextFunction, Request, Response } from "express";
-import { ICreateUser, IUser } from "../interfaces/user.interface.ts";
-import AuthRepository from "../repositories/auth.repository.ts";
-import UserRepository from "../repositories/user.repository.ts";
+import { ICreateUser, IUser } from "../interfaces/user.interface";
+import AuthRepository from "../repositories/auth.repository";
+import UserRepository from "../repositories/user.repository";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { SECRET_KEY } from "../config/index.ts";
+import { SECRET_KEY } from "../config/index";
 import { validateHeaderName } from "http";
 
 class AuthController {

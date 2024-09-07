@@ -2,7 +2,7 @@ FROM node:18-alpine AS build
 
 WORKDIR /app
 
-COPY package*.json .
+COPY package*.json ./
 
 RUN npm install
 
@@ -20,8 +20,8 @@ RUN npm ci --only=production
 
 COPY --from=build /app/dist ./dist
 
-COPY start.sh ./
+COPY start.prod.sh ./
 
-RUN chmod +x start.sh
+CMD ["./start.prod.sh"]
 
-CMD ["./start.sh"]
+# CMD ["node", "dist/app.js"]
