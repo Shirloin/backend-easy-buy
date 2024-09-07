@@ -12,7 +12,8 @@ export class Websocket extends Server {
 
     constructor(server: HttpServer | HttpsServer) {
         super(server, {
-            cors: WEBSOCKET_CORS
+            cors: WEBSOCKET_CORS,
+            transports: ["websocket"]
         })
     }
 
