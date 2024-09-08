@@ -119,4 +119,22 @@ export default class ProductController {
       next(error)
     }
   }
+
+  public searchProducts = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+
+      const { query } = req.query;
+      if (!query || typeof query !== 'string') {
+        return res.status(400).json({ message: "Search query is required and must be a string" });
+      }
+
+
+      const products = await this.productRepository.searchProducts(query as string);
+
+      return res.status(200).json({ products });
+    } catch (error) {
+      console.log(error)
+      next(error);
+    }
+  }
 }

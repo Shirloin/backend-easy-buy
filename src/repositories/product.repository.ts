@@ -150,4 +150,20 @@ export default class ProductRepository {
   public async getProductVariantById(variantId: string) {
     return await this.productVariant.findById(variantId)
   }
+
+  public async searchProducts(query: string) {
+    const regex = new RegExp(query, "i")
+
+    return await this.product.find({
+      $or: [
+        { name: { $regex: regex } },
+        { "productVariants.name": { $regex: regex } },
+        { "productCategory.name": { $regex: regex } },
+        { "shop.name": { $regex: regex } },
+      ]
+    }).populate("productCategory")
+      .populate("productVariants")
+      .populate("shop")
+      .exec();
+  }
 }
