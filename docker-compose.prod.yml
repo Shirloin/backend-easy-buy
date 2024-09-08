@@ -12,6 +12,8 @@ services:
       - mongodb
     networks:
       - network
+    env_file:
+      - .env
     # volumes:
     #   - ./start.sh:/app/start.sh
     # command: ./start.prod.sh
