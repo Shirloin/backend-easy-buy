@@ -25,7 +25,7 @@ class App {
   constructor() {
     this.app = express();
     this.env = NODE_ENV || "development";
-    this.port = PORT || "6543";
+    this.port = PORT || "3000";
 
     this.connectToDatabase();
     this.initializeWebsocket()
@@ -80,12 +80,12 @@ class App {
   }
 
   private initializeWebsocket() {
-    if (this.env === "production") {
-      this.server = createHttpsServer(this.app)
-    }
-    else {
-      this.server = createHttpServer(this.app)
-    }
+    this.server = createHttpServer(this.app)
+    // if (this.env === "production") {
+    //   this.server = createHttpsServer(this.app)
+    // }
+    // else {
+    // }
     Websocket.getInstance(this.server);
     new ChatSocket()
   }

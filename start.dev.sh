@@ -7,9 +7,9 @@ until check_mongodb_health; do
   sleep 2
 done
 
-echo "Running database seeding..."
-npm run seed
+# echo "Running database seeding..."
+# npm run seed
 
 # Start the application
 echo "Starting the application..."
-npm run dev
+node dist/app.js

@@ -5,18 +5,20 @@ services:
     container_name: easy-buy-api
     build:
       context: .
-      dockerfile: Dockerfile
-      target: build
+      dockerfile: Dockerfile.dev
     ports:
       - 6543:6543
     depends_on:
       - mongodb
     networks:
       - network
-    volumes:
-      - ./:/app
-      - /app/node_modules
-    command: ./start.dev.sh
+    # volumes:
+    #   - ./:/app
+    #   - /app/start.dev.sh
+    # volumes:
+    #   - ./:/app
+    #   - /app/node_modules
+    # command: ./start.dev.sh
 
     healthcheck:
       test: ["CMD", "nc", "-z", "mongodb", "27017"]
