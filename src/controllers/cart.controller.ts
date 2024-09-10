@@ -21,22 +21,24 @@ export default class CartController {
             }
             const { variantId, shopId, quantity } = req.body
             let cart = await this.cartRepository.getCartByUserAndShop(user._id, shopId)
+            // Cart Exist
             if (cart) {
-                console.log("cart exist")
                 const existingCartItem = await this.cartRepository.getCartItemByCartAndVariant(cart.items, variantId)
 
+                // Cart Item Exist
                 if (existingCartItem) {
-                    console.log("cart item exist")
                     existingCartItem.quantity += quantity;
                     await existingCartItem.save()
-                } else {
-                    console.log("cart item not exist")
+                }
+                // Cart Item Not Exist
+                else {
                     const newCartItem = await this.cartRepository.createCartItem(variantId, quantity);
                     cart.items.push(newCartItem);
                     await cart.save()
                 }
-            } else {
-                console.log("cart not exist")
+            }
+            // Cart Not Exist
+            else {
                 const newCartItem = await this.cartRepository.createCartItem(variantId, quantity);
                 cart = await this.cartRepository.createCart(user._id, shopId, newCartItem._id)
                 user.carts.push(cart)
