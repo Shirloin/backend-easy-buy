@@ -25,5 +25,6 @@ export default class ProductRoute implements Routes {
     this.router.get("/product/latest-product", this.productController.getLatestProduct)
     this.router.get("/product/search", this.productController.searchProducts)
     this.router.get("/product/:id", this.productController.getProductDetail)
+    this.router.get("/product/category/:id", this.productController.getRelatedProducts)
   }
 }

@@ -136,4 +136,15 @@ export default class ProductController {
       next(error);
     }
   }
+
+  public getRelatedProducts = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params
+      const products = await this.productRepository.getRelatedProduct(id)
+
+      return res.status(200).json({ products })
+    } catch (error) {
+      next(error)
+    }
+  }
 }

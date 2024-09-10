@@ -166,4 +166,14 @@ export default class ProductRepository {
       .populate("shop")
       .exec();
   }
+
+  public async getRelatedProduct(id: string) {
+    return await this.product.find({ productCategory: id })
+      .populate([
+        { path: 'productVariants' },
+        { path: 'shop' }
+      ])
+      .sort({ createdAt: -1 })
+      .limit(10);
+  }
 }
