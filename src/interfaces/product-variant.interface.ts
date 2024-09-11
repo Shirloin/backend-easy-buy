@@ -1,4 +1,5 @@
 import { IProduct } from "./product.interface";
+import { IReview } from "./review.interface";
 
 export interface IProductVariant {
   _id: string;
@@ -7,6 +8,7 @@ export interface IProductVariant {
   stock: number;
   imageUrl: string;
   product: IProduct;
+  reviews: IReview[]
 }
 
 export interface ICreateProductVariant {

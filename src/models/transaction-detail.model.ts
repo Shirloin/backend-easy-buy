@@ -17,6 +17,10 @@ const transaction_detail_schema: Schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "ProductVariant",
     },
+    review: {
+        type: Schema.Types.ObjectId,
+        ref: "Review"
+    }
 })
 const TransactionDetail = model<ITransactionDetail & Document>("TransactionDetail", transaction_detail_schema)
 export default TransactionDetail

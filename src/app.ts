@@ -16,6 +16,7 @@ import { createServer as createHttpsServer } from "https";
 import { Websocket } from "./websocket/websocket";
 import ChatSocket from "./websocket/chat.socket";
 import ChatRoute from "./routes/chat.route";
+import ReviewRoute from "./routes/review.route";
 class App {
   public app: express.Application;
   public env: string;
@@ -76,16 +77,12 @@ class App {
     this.app.use("/api", new TransationRoute().router)
     this.app.use("/api", new AddressRoute().router)
     this.app.use("/api", new ChatRoute().router)
+    this.app.use("/api", new ReviewRoute().router)
     this.app.use(ErrorHandling);
   }
 
   private initializeWebsocket() {
     this.server = createHttpServer(this.app)
-    // if (this.env === "production") {
-    //   this.server = createHttpsServer(this.app)
-    // }
-    // else {
-    // }
     Websocket.getInstance(this.server);
     new ChatSocket()
   }

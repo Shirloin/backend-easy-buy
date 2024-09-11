@@ -64,7 +64,23 @@ export default class TransactionController {
 
             return res.status(200).json({ transactions: transactions })
         } catch (error) {
+            next(error)
+        }
+    }
+    public getTransactionByUser = async (req: Request,
+        res: Response,
+        next: NextFunction) => {
+        try {
+            const sessionUser = (req.session as any).user;
+            let user = await this.userRepository.getUserById(sessionUser.id);
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            const transactions = await this.transactionRepository.getTransactionByUser(user._id)
 
+            return res.status(200).json({ transactions: transactions })
+        } catch (error) {
+            next(error)
         }
     }
 }

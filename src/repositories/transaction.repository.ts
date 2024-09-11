@@ -49,4 +49,17 @@ export default class TransactionRepository {
         )
     }
 
+    public async getTransactionByUser(userId: string) {
+        return await this.transactionHeader.find({ user: userId }).populate([
+            {
+                path: "details", populate: [
+                    { path: "product" },
+                    { path: "variant" },
+                ]
+            },
+            { path: "shop" }
+        ]
+        )
+    }
+
 }

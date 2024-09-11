@@ -22,6 +22,12 @@ const product_variant_schema: Schema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Product",
   },
+  reviews: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Review",
+    }
+  ]
 });
 
 const ProductVariant = model<IProductVariant & Document>(
