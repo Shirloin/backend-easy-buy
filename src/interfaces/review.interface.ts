@@ -6,7 +6,7 @@ export interface IReview {
     rating: number
     text: string
     productVariant: IProductVariant
-    transaction: ITransactionDetail
+    transactionDetail: ITransactionDetail
     creator: IUser
 }
 
@@ -14,6 +14,6 @@ export interface ICreateReview {
     rating: number
     text: string
     productVariant: string
-    transaction: string
+    transactionDetail: string
     creator: string
 }

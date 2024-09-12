@@ -5,6 +5,10 @@ const transaction_detail_schema: Schema = new Schema({
     quantity: {
         type: Number,
     },
+    reviewStatus: {
+        type: Boolean,
+        default: false
+    },
     transaction: {
         type: Schema.Types.ObjectId,
         ref: "TransactionHeader"

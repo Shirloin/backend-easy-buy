@@ -13,5 +13,7 @@ export default class TransationRoute implements Routes {
         this.router.get("/transaction/shop", authMiddleware, this.transactionController.getTransactionByShop)
         this.router.post("/transaction", authMiddleware, this.transactionController.createTransaction)
         this.router.get("/transaction", authMiddleware, this.transactionController.getTransactionByUser)
+        this.router.get("/transaction/no-review", authMiddleware, this.transactionController.getTransactionWithNoReview)
+        this.router.get("/transaction/review", authMiddleware, this.transactionController.getTransactionWithReview)
     }
 }

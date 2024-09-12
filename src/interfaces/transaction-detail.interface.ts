@@ -10,4 +10,5 @@ export default interface ITransactionDetail {
     product: IProduct
     variant: IProductVariant
     review: IReview
+    reviewStatus: boolean
 }

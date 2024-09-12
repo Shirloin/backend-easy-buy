@@ -14,7 +14,7 @@ const review_schema: Schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "ProductVariant",
     },
-    transaction: {
+    transactionDetail: {
         type: Schema.Types.ObjectId,
         ref: "TrasactionDetail",
     },

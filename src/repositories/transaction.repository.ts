@@ -62,4 +62,41 @@ export default class TransactionRepository {
         )
     }
 
+    public async getTransactionWithNoReview(userId: string) {
+        return await this.transactionHeader.find({
+            user: userId, 'details': {
+                $elemMatch: { 'reviewStatus': false }
+            }
+        }).populate([
+            {
+                path: "details", populate: [
+                    { path: "product" },
+                    { path: "variant" },
+                ]
+            },
+            { path: "shop" }
+        ]
+        )
+    }
+    public async getTransactionWithReview(userId: string) {
+        return await this.transactionHeader.find({
+            user: userId, 'details': {
+                $elemMatch: { 'reviewStatus': true }
+            }
+        }).populate([
+            {
+                path: "details", populate: [
+                    { path: "product" },
+                    { path: "variant" },
+                ]
+            },
+            { path: "shop" },
+            { path: "review" }
+        ]
+        )
+    }
+
+    public async updateTransactionReviewStatus(transactionDetailId: string) {
+        return await this.transactionDetail.updateOne({ _id: transactionDetailId }, { reviewStatus: true })
+    }
 }

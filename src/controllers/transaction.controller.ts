@@ -83,4 +83,37 @@ export default class TransactionController {
             next(error)
         }
     }
+
+    public getTransactionWithNoReview = async (req: Request,
+        res: Response,
+        next: NextFunction) => {
+        try {
+            const sessionUser = (req.session as any).user;
+            let user = await this.userRepository.getUserById(sessionUser.id);
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            const transactions = await this.transactionRepository.getTransactionWithNoReview(user._id)
+
+            return res.status(200).json({ transactions: transactions })
+        } catch (error) {
+            next(error)
+        }
+    }
+    public getTransactionWithReview = async (req: Request,
+        res: Response,
+        next: NextFunction) => {
+        try {
+            const sessionUser = (req.session as any).user;
+            let user = await this.userRepository.getUserById(sessionUser.id);
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            const transactions = await this.transactionRepository.getTransactionWithReview(user._id)
+
+            return res.status(200).json({ transactions: transactions })
+        } catch (error) {
+            next(error)
+        }
+    }
 }
