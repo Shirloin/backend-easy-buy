@@ -8,6 +8,8 @@ export interface IReview {
     productVariant: IProductVariant
     transactionDetail: ITransactionDetail
     creator: IUser
+    createdAt: Date
+    updatedAt: Date
 }
 
 export interface ICreateReview {

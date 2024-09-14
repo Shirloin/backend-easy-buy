@@ -64,36 +64,42 @@ export default class TransactionRepository {
 
     public async getTransactionWithNoReview(userId: string) {
         return await this.transactionHeader.find({
-            user: userId, 'details': {
-                $elemMatch: { 'reviewStatus': false }
-            }
+            user: userId,
         }).populate([
             {
-                path: "details", populate: [
+                path: "details",
+                match: { reviewStatus: false },
+                populate: [
                     { path: "product" },
                     { path: "variant" },
                 ]
             },
             { path: "shop" }
         ]
-        )
+        ).exec()
+            .then((transactions) => {
+                return transactions.filter((transaction) => transaction.details.length > 0)
+            })
     }
+
     public async getTransactionWithReview(userId: string) {
         return await this.transactionHeader.find({
-            user: userId, 'details': {
-                $elemMatch: { 'reviewStatus': true }
-            }
+            user: userId,
         }).populate([
             {
-                path: "details", populate: [
+                path: "details",
+                match: { reviewStatus: true },
+                populate: [
                     { path: "product" },
                     { path: "variant" },
                 ]
             },
-            { path: "shop" },
-            { path: "review" }
+            { path: "shop" }
         ]
-        )
+        ).exec()
+            .then((transactions) => {
+                return transactions.filter((transaction) => transaction.details.length > 0)
+            })
     }
 
     public async updateTransactionReviewStatus(transactionDetailId: string) {

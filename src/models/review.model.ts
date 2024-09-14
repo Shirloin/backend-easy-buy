@@ -1,5 +1,6 @@
 import { Document, model, Schema } from "mongoose";
 import { IReview } from "../interfaces/review.interface";
+import { timeStamp } from "console";
 
 const review_schema: Schema = new Schema({
     rating: {
@@ -22,7 +23,7 @@ const review_schema: Schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
     }
-})
+}, { timestamps: true })
 
 const Review = model<IReview & Document>("Review", review_schema)
 export default Review
