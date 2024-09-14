@@ -13,5 +13,7 @@ export default class ReviewRoute implements Routes {
 
     private initializeRoutes() {
         this.router.post("/review", authMiddleware, this.reviewController.createReview)
+        this.router.get("/review/product/:id", this.reviewController.getReviewByProduct)
+        this.router.get("/review/rating/product/:id", this.reviewController.getReviewRating)
     }
 }

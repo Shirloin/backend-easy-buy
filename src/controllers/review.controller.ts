@@ -16,18 +16,43 @@ export default class ReviewController {
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
-            const { rating, text, productVariant, transactionDetail } = req.body
+            const { rating, text, product, productVariant, transactionDetail } = req.body
             const createReviewData: ICreateReview = {
                 rating: rating,
                 text: text,
+                product: product,
                 productVariant: productVariant,
                 transactionDetail: transactionDetail,
                 creator: user._id
             }
-            const updatedTransaction = this.transactionRepository.updateTransactionReviewStatus(transactionDetail)
 
             const review = await this.reviewRepository.createReview(createReviewData)
+            const transaction = await this.transactionRepository.updateTransaction(transactionDetail, review)
+
             return res.status(200).json({ review: review, message: "Review has been submitted" })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    public getReviewByProduct = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { id } = req.params
+            const reviews = await this.reviewRepository.getReviewByProduct(id)
+            return res.status(200).json({ reviews })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    public getReviewRating = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { id } = req.params
+            const rating = await this.reviewRepository.getProductRating(id)
+            return res.status(200).json({
+                averageRating: rating.averageRating,
+                userCount: rating.userCount
+            });
         } catch (error) {
             next(error)
         }

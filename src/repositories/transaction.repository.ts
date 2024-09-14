@@ -1,5 +1,6 @@
 import { IProductVariant } from "../interfaces/product-variant.interface"
 import { IProduct } from "../interfaces/product.interface"
+import { IReview } from "../interfaces/review.interface"
 import ITransactionDetail from "../interfaces/transaction-detail.interface"
 import TransactionDetail from "../models/transaction-detail.model"
 import TransactionHeader from "../models/transaction-header.model"
@@ -90,6 +91,7 @@ export default class TransactionRepository {
                 path: "details",
                 match: { reviewStatus: true },
                 populate: [
+                    { path: "review" },
                     { path: "product" },
                     { path: "variant" },
                 ]
@@ -102,7 +104,7 @@ export default class TransactionRepository {
             })
     }
 
-    public async updateTransactionReviewStatus(transactionDetailId: string) {
-        return await this.transactionDetail.updateOne({ _id: transactionDetailId }, { reviewStatus: true })
+    public async updateTransaction(transactionDetailId: string, review: IReview) {
+        return await this.transactionDetail.updateOne({ _id: transactionDetailId }, { reviewStatus: true, review: review })
     }
 }

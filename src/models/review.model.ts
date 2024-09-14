@@ -11,6 +11,10 @@ const review_schema: Schema = new Schema({
         type: String,
         required: true
     },
+    product: {
+        type: Schema.Types.ObjectId,
+        ref: "Product"
+    },
     productVariant: {
         type: Schema.Types.ObjectId,
         ref: "ProductVariant",
