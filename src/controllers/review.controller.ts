@@ -54,7 +54,6 @@ export default class ReviewController {
                 userCount: rating.userCount
             });
         } catch (error) {
-            console.log(error)
             next(error)
         }
     }
