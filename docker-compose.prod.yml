@@ -6,8 +6,7 @@ services:
     ports:
       - 6543:6543
     depends_on:
-      mongodb:
-        condition: service_healthy
+      - mongodb
     networks:
       - network
 
@@ -27,7 +26,6 @@ services:
       - network
     volumes:
       - easy-buy-data:/data/db
-    restart: always
 
 networks:
   network:
