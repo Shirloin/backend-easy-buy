@@ -25,11 +25,11 @@ services:
     networks:
       - network
     volumes:
-      - easy-buy-data:/data/db
+      - mongo-data:/data/db
 
 networks:
   network:
     driver: bridge
 
 volumes:
-  easy-buy-data:
+  mongo-data:

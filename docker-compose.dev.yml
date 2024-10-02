@@ -34,13 +34,7 @@ services:
       - "27017:27017"
     networks:
       - network
-    volumes:
-      - easy-buy-data:/data/db
-    restart: always
 
 networks:
   network:
     driver: bridge
-
-volumes:
-  easy-buy-data:
