@@ -24,16 +24,16 @@ jobs:
         name: Create .env
         run: |
           touch .env
-          echo ORIGIN = ${{secrets.ORIGIN}} >> .env
-          echo SECRET_KEY = ${{secrets.SECRET_KEY}} >> .env
-          echo NODE_ENV = ${{secrets.NODE_ENV}} >> .env
-          echo PORT = ${{secrets.PORT}} >> .env
-          echo DB_HOST = ${{secrets.DB_HOST}} >> .env
-          echo DB_PORT = ${{secrets.DB_PORT}} >> .env
-          echo DB_NAME = ${{secrets.DB_NAME}} >> .env
-          echo CREDENTIALS = ${{secrets.CREDENTIALS}} >> .env
-          echo MONGO_INITDB_ROOT_USERNAME = ${{secrets.MONGO_INITDB_ROOT_USERNAME}} >> .env
-          echo MONGO_INITDB_ROOT_PASSWORD = ${{secrets.MONGO_INITDB_ROOT_PASSWORD}} >> .env
+          echo ORIGIN=${{secrets.ORIGIN}} >> .env
+          echo SECRET_KEY=${{secrets.SECRET_KEY}} >> .env
+          echo NODE_ENV=${{secrets.NODE_ENV}} >> .env
+          echo PORT=${{secrets.PORT}} >> .env
+          echo DB_HOST=${{secrets.DB_HOST}} >> .env
+          echo DB_PORT=${{secrets.DB_PORT}} >> .env
+          echo DB_NAME=${{secrets.DB_NAME}} >> .env
+          echo CREDENTIALS=${{secrets.CREDENTIALS}} >> .env
+          echo MONGO_INITDB_ROOT_USERNAME=${{secrets.MONGO_INITDB_ROOT_USERNAME}} >> .env
+          echo MONGO_INITDB_ROOT_PASSWORD=${{secrets.MONGO_INITDB_ROOT_PASSWORD}} >> .env
 
       - #Create a build kit builder instance
         name: Set up docker Build
