@@ -34,15 +34,6 @@ jobs:
           echo CREDENTIALS = ${{secrets.CREDENTIALS}} >> .env
           echo MONGO_INITDB_ROOT_USERNAME = ${{secrets.MONGO_INITDB_ROOT_USERNAME}} >> .env
           echo MONGO_INITDB_ROOT_PASSWORD = ${{secrets.MONGO_INITDB_ROOT_PASSWORD}} >> .env
-      
-      - # Debug print environment variables
-        name: Debug Environment Variables
-        run: |
-          echo "PORT=${{secrets.PORT}}"
-          echo "DB_PORT=${{secrets.DB_PORT}}"
-          echo "MONGO_INITDB_ROOT_USERNAME=${{secrets.MONGO_INITDB_ROOT_USERNAME}}"
-          echo "MONGO_INITDB_ROOT_PASSWORD=${{secrets.MONGO_INITDB_ROOT_PASSWORD}}"
-
 
       - #Create a build kit builder instance
         name: Set up docker Build
@@ -56,6 +47,16 @@ jobs:
           file: ./Dockerfile.prod
           push: true
           tags: ${{secrets.DOCKERHUB_USERNAME}}/backend-easy-buy:latest
+
+      - # Copy .env to VPS
+        name: Copy .env to VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          source: .env
+          target: ./backend-easy-buy/.env 
 
       - #Deploy To VPS
         name: Deploy to VPS
