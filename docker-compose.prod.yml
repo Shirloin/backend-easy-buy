@@ -4,14 +4,14 @@ services:
     image: riccardo006/backend-easy-buy:latest
     container_name: easy-buy-api
     ports:
-      - 6543:6543
+      - "${PORT}:${PORT}"
     depends_on:
       - mongodb
     networks:
       - network
 
     healthcheck:
-      test: ["CMD", "nc", "-z", "mongodb", "27017"]
+      test: ["CMD", "nc", "-z", "mongodb", "${DB_PORT}"]
       interval: 10s
       retries: 5
       start_period: 30s
@@ -21,7 +21,7 @@ services:
     image: mongo:latest
     container_name: easy-buy-db
     ports:
-      - "27017:27017"
+      - "${DB_PORT}:${DB_PORT}"
     networks:
       - network
     environment:
