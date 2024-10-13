@@ -56,7 +56,7 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
           source: .env
-          target: ./backend-easy-buy/
+          target: ./backend-easy-buy/.env
 
       - #Deploy To VPS
         name: Deploy to VPS
