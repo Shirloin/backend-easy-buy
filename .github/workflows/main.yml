@@ -51,15 +51,15 @@ jobs:
           push: true
           tags: ${{secrets.DOCKERHUB_USERNAME}}/backend-easy-buy:latest
 
-      - # Copy .env to VPS
-        name: Copy .env to VPS
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.VPS_IP }}
-          username: ${{ secrets.VPS_USERNAME }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          source: .env
-          target: /home/${{secrets.VPS_USERNAME}}/backend-easy-buy/.env
+      # - # Copy .env to VPS
+      #   name: Copy .env to VPS
+      #   uses: appleboy/scp-action@master
+      #   with:
+      #     host: ${{ secrets.VPS_IP }}
+      #     username: ${{ secrets.VPS_USERNAME }}
+      #     password: ${{ secrets.VPS_PASSWORD }}
+      #     source: .env
+      #     target: /home/${{secrets.VPS_USERNAME}}/easy-buy-backend/.env
 
       - #Deploy To VPS
         name: Deploy to VPS
@@ -73,4 +73,9 @@ jobs:
             curl -o docker-compose.prod.yml https://raw.githubusercontent.com/shirloin/backend-easy-buy/main/docker-compose.prod.yml
             curl -o start.prod.sh https://raw.githubusercontent.com/shirloin/backend-easy-buy/main/start.prod.sh
             docker pull ${{secrets.DOCKERHUB_USERNAME}}/backend-easy-buy:latest
+            DB_USERNAME=${{secrets.MONGO_INITDB_ROOT_USERNAME}} \
+            DB_PASSWORD=${{secrets.MONGO_INITDB_ROOT_PASSWORD}} \
+            DB_HOST=${{secrets.DB_HOST}} \
+            DB_PORT=${{secrets.DB_PORT}} \
+            DB_NAME=${{secrets.DB_NAME}} \
             docker compose -f docker-compose.prod.yml up -d
