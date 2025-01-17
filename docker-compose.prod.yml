@@ -13,10 +13,11 @@ services:
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
       - DB_NAME=${DB_NAME}
-      - MONGO_URI=mongodb://${DB_USERNAME}:${DB_PASSWORD}@mongodb:${DB_PORT}/${DB_NAME}?authSource=admin
+      - MONGO_URI=mongodb://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?authSource=admin
 
 networks:
   shared-network:
+    external: true
 
 volumes:
   mongo-data:
