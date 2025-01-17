@@ -1,6 +1,7 @@
 name: backend-easy-buy
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - "main"
