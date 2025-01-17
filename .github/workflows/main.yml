@@ -72,10 +72,10 @@ jobs:
             cd easy-buy-backend
             curl -o docker-compose.prod.yml https://raw.githubusercontent.com/shirloin/backend-easy-buy/main/docker-compose.prod.yml
             curl -o start.prod.sh https://raw.githubusercontent.com/shirloin/backend-easy-buy/main/start.prod.sh
+            sed -i 's|${DB_PASSWORD}|${{secrets.MONGO_INITDB_ROOT_PASSWORD}}|g' docker-compose.prod.yml
+            sed -i 's|${DB_HOST}|${{secrets.DB_HOST}}|g' docker-compose.prod.yml
+            sed -i 's|${DB_PORT}|${{secrets.DB_PORT}}|g' docker-compose.prod.yml
+            sed -i 's|${DB_NAME}|${{secrets.DB_NAME}}|g' docker-compose.prod.yml
             docker pull ${{secrets.DOCKERHUB_USERNAME}}/backend-easy-buy:latest
-            DB_USERNAME=${{secrets.MONGO_INITDB_ROOT_USERNAME}} \
-            DB_PASSWORD=${{secrets.MONGO_INITDB_ROOT_PASSWORD}} \
-            DB_HOST=${{secrets.DB_HOST}} \
-            DB_PORT=${{secrets.DB_PORT}} \
-            DB_NAME=${{secrets.DB_NAME}} \
+            sed -i 's|${DB_USERNAME}|${{secrets.MONGO_INITDB_ROOT_USERNAME}}|g' docker-compose.prod.yml
             docker compose -f docker-compose.prod.yml up -d
