@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  api:
+    image: easy-buy-backend:latest
+    container_name: easy-buy-api
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - 6543:6543
+    depends_on:
+      - mongodb
+    networks:
+      - network
+    # volumes:
+    #   - ./:/app
+    #   - /app/start.dev.sh
+    # volumes:
+    #   - ./:/app
+    #   - /app/node_modules
+    # command: ./start.dev.sh
+
+    healthcheck:
+      test: ["CMD", "nc", "-z", "mongodb", "27017"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+
+  mongodb:
+    image: mongo:latest
+    container_name: easy-buy-db
+    ports:
+      - "27017:27017"
+    networks:
+      - network
+
+networks:
+  network:
+    driver: bridge

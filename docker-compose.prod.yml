@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  api:
+    image: riccardo006/backend-easy-buy:latest
+    container_name: easy-buy-backend
+    ports:
+      - "6543:6543"
+    networks:
+      - shared-network
+    environment:
+      - MONGO_URI=mongodb://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}
+
+networks:
+  shared-network:
+
+volumes:
+  mongo-data:
