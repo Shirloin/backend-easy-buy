@@ -6,6 +6,7 @@ import { NODE_ENV, ORIGIN } from "../config";
 const WEBSOCKET_CORS = {
     origin: NODE_ENV === "production" ? ORIGIN : "*",
     methods: ["GET", "POST"],
+    credentials: true
 }
 export class Websocket extends Server {
     private static io: Websocket
@@ -13,7 +14,8 @@ export class Websocket extends Server {
     constructor(server: HttpServer | HttpsServer) {
         super(server, {
             cors: WEBSOCKET_CORS,
-            transports: ["websocket"]
+            transports: ["websocket"],
+            allowEIO3: true
         })
     }
 
