@@ -1,5 +1,5 @@
 
-npm run seed
+# npm run seed
 
 echo "Seeding completed. Starting the application..."
 
