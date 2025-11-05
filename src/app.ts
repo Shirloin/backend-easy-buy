@@ -17,6 +17,7 @@ import { Websocket } from "./websocket/websocket";
 import ChatSocket from "./websocket/chat.socket";
 import ChatRoute from "./routes/chat.route";
 import ReviewRoute from "./routes/review.route";
+import MongoStore from "connect-mongo";
 class App {
   public app: express.Application;
   public env: string;
@@ -57,6 +58,10 @@ class App {
         secret: SECRET_KEY || "SECRET_KEY",
         resave: false,
         saveUninitialized: false,
+        store: MongoStore.create({
+          mongoUrl: dbConnection.url,
+          ttl: 20 * 60,
+        }),
         cookie: {
           maxAge: 20 * 60 * 1000,
           secure: this.env === "production",
