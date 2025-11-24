@@ -24,7 +24,8 @@ export default class ProductRoute implements Routes {
     this.router.delete("/product/:id", authMiddleware, this.productController.deleteProduct)
     this.router.get("/product/latest-product", this.productController.getLatestProduct)
     this.router.get("/product/search", this.productController.searchProducts)
-    this.router.get("/product/:id", this.productController.getProductDetail)
     this.router.get("/product/category/:id", this.productController.getRelatedProducts)
+    this.router.get("/product", this.productController.getAllProducts)
+    this.router.get("/product/:id", this.productController.getProductDetail)
   }
 }

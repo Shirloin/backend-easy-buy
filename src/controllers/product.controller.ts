@@ -147,4 +147,29 @@ export default class ProductController {
       next(error)
     }
   }
+
+  public getAllProducts = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const search = req.query.search as string | undefined;
+
+      // Validate pagination parameters
+      if (page < 1) {
+        return res.status(400).json({ message: "Page must be greater than 0" });
+      }
+      if (limit < 1 || limit > 100) {
+        return res.status(400).json({ message: "Limit must be between 1 and 100" });
+      }
+
+      const result = await this.productRepository.getAllProducts(page, limit, search);
+
+      return res.status(200).json({
+        products: result.products,
+        pagination: result.pagination
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

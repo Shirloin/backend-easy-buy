@@ -176,4 +176,47 @@ export default class ProductRepository {
       .sort({ createdAt: -1 })
       .limit(10);
   }
+
+  public async getAllProducts(page: number = 1, limit: number = 10, search?: string) {
+    const skip = (page - 1) * limit;
+
+    // Build search filter
+    let filter: any = {};
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), "i");
+      filter = {
+        $or: [
+          { name: { $regex: regex } },
+          { description: { $regex: regex } },
+        ]
+      };
+    }
+
+    // Get total count for pagination
+    const total = await this.product.countDocuments(filter);
+
+    // Get products with pagination
+    const products = await this.product.find(filter)
+      .populate([
+        { path: 'productVariants' },
+        { path: 'productCategory' },
+        { path: 'shop' }
+      ])
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
+
+    return {
+      products,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage: page < Math.ceil(total / limit),
+        hasPrevPage: page > 1
+      }
+    };
+  }
 }
