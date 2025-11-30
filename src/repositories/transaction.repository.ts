@@ -4,6 +4,7 @@ import { IReview } from "../interfaces/review.interface"
 import ITransactionDetail from "../interfaces/transaction-detail.interface"
 import TransactionDetail from "../models/transaction-detail.model"
 import TransactionHeader from "../models/transaction-header.model"
+import logger from "../utils/logger"
 
 export default class TransactionRepository {
     static instance: TransactionRepository
@@ -23,18 +24,35 @@ export default class TransactionRepository {
         return TransactionRepository.instance
     }
     public async createTransactionHeader(userId: string, shopId: string) {
-        return await this.transactionHeader.create({
+        logger.info("TransactionRepository.createTransactionHeader - Creating transaction header", {
+            userId,
+            shopId,
+        });
+        const transactionHeader = await this.transactionHeader.create({
             user: userId,
             shop: shopId,
         })
+        logger.info("TransactionRepository.createTransactionHeader - Transaction header created successfully", {
+            transactionHeaderId: transactionHeader._id,
+        });
+        return transactionHeader
     }
 
     public async createTransactionDetail(quantity: number, product: IProduct, variant: IProductVariant) {
-        return await this.transactionDetail.create({
+        logger.info("TransactionRepository.createTransactionDetail - Creating transaction detail", {
+            productId: product._id,
+            variantId: variant._id,
+            quantity,
+        });
+        const transactionDetail = await this.transactionDetail.create({
             quantity: quantity,
             product: product,
             variant: variant
         })
+        logger.info("TransactionRepository.createTransactionDetail - Transaction detail created successfully", {
+            transactionDetailId: transactionDetail._id,
+        });
+        return transactionDetail
     }
 
     public async getTransactionByShop(shopId: string) {
@@ -105,6 +123,15 @@ export default class TransactionRepository {
     }
 
     public async updateTransaction(transactionDetailId: string, review: IReview) {
-        return await this.transactionDetail.updateOne({ _id: transactionDetailId }, { reviewStatus: true, review: review })
+        logger.info("TransactionRepository.updateTransaction - Updating transaction with review", {
+            transactionDetailId,
+            reviewId: review?._id,
+        });
+        const result = await this.transactionDetail.updateOne({ _id: transactionDetailId }, { reviewStatus: true, review: review })
+        logger.info("TransactionRepository.updateTransaction - Transaction updated successfully", {
+            transactionDetailId,
+            modified: result.modifiedCount,
+        });
+        return result
     }
 }

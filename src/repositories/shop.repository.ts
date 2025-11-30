@@ -1,6 +1,7 @@
 import { ICreateShop, IShop } from "../interfaces/shop.interface";
 import Shop from "../models/shop.model";
 import User from "../models/user.model";
+import logger from "../utils/logger";
 
 class ShopRepository {
   static instance: ShopRepository;
@@ -27,8 +28,16 @@ class ShopRepository {
   }
 
   public async createShop(shopData: ICreateShop): Promise<IShop> {
+    logger.info("ShopRepository.createShop - Creating shop", {
+      shopName: shopData.name,
+      userId: shopData.user?._id,
+    });
     const newShop: IShop = await this.shop.create({
       ...shopData,
+    });
+    logger.info("ShopRepository.createShop - Shop created successfully", {
+      shopId: newShop._id,
+      shopName: newShop.name,
     });
     return newShop;
   }

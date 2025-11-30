@@ -12,9 +12,4 @@ COPY . .
 
 RUN npm run build
 
-COPY start.prod.sh ./
-
-# RUN chmod +x start.prod.sh
-
-# CMD ["./start.prod.sh"]
 CMD ["node", "dist/app.js"]

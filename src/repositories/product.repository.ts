@@ -10,6 +10,7 @@ import ProductCategory from "../models/product-category.model";
 import ProductVariant from "../models/product-variant.model";
 import Product from "../models/product.model";
 import Shop from "../models/shop.model";
+import logger from "../utils/logger";
 
 export default class ProductRepository {
   static instance: ProductRepository;
@@ -37,10 +38,18 @@ export default class ProductRepository {
     productData: ICreateProduct,
     productVariantData: ICreateProductVariant[],
   ): Promise<IProduct> {
+    logger.info("ProductRepository.createProduct - Creating product", {
+      productName: productData.name,
+      category: productData.category,
+      variantCount: productVariantData.length,
+    });
     let category = await this.productCategory.findOne({
       name: productData.category,
     });
     if (!category) {
+      logger.info("ProductRepository.createProduct - Creating new category", {
+        categoryName: productData.category,
+      });
       category = await this.productCategory.create({
         name: productData.category,
       });
@@ -67,6 +76,10 @@ export default class ProductRepository {
     category.products.push(newProduct);
     await category.save();
 
+    logger.info("ProductRepository.createProduct - Product created successfully", {
+      productId: newProduct._id,
+      productName: newProduct.name,
+    });
     return newProduct;
   }
 
@@ -83,8 +96,13 @@ export default class ProductRepository {
   public async updateProduct(productId: string, productData: ICreateProduct,
     productVariantData: IProductVariant[],
     productCategory: IProductCategory) {
+    logger.info("ProductRepository.updateProduct - Updating product", {
+      productId,
+      productName: productData.name,
+    });
     const product = await this.product.findOne({ _id: productId })
     if (!product) {
+      logger.error("ProductRepository.updateProduct - Product not found", { productId });
       throw new Error("Product not found");
     }
 
@@ -98,6 +116,9 @@ export default class ProductRepository {
     product.productCategory = productCategory
     await product.save()
 
+    logger.info("ProductRepository.updateProduct - Product updated successfully", {
+      productId,
+    });
     return product
   }
 
@@ -115,6 +136,7 @@ export default class ProductRepository {
   }
 
   public async deleteProduct(productId: string) {
+    logger.info("ProductRepository.deleteProduct - Deleting product", { productId });
     const productVariants = await this.productVariant.find({ product: productId })
     const variantIds = productVariants.map(variant => variant._id);
     const deletedCartItems = await this.cartItem.find({ variant: { $in: variantIds } });
@@ -125,7 +147,13 @@ export default class ProductRepository {
       { $pull: { items: { $in: deletedCartItemIds } } }
     );
     await this.productVariant.deleteMany({ product: productId })
-    return await this.product.findOneAndDelete({ _id: productId })
+    const deletedProduct = await this.product.findOneAndDelete({ _id: productId })
+    logger.info("ProductRepository.deleteProduct - Product deleted successfully", {
+      productId,
+      deletedVariants: variantIds.length,
+      deletedCartItems: deletedCartItems.length,
+    });
+    return deletedProduct
   }
 
   public async getLatestProduct() {
@@ -178,6 +206,11 @@ export default class ProductRepository {
   }
 
   public async getAllProducts(page: number = 1, limit: number = 10, search?: string) {
+    logger.info("ProductRepository.getAllProducts - Fetching products", {
+      page,
+      limit,
+      search,
+    });
     const skip = (page - 1) * limit;
 
     // Build search filter
@@ -207,6 +240,12 @@ export default class ProductRepository {
       .limit(limit)
       .exec();
 
+    logger.info("ProductRepository.getAllProducts - Products fetched successfully", {
+      page,
+      limit,
+      total,
+      returned: products.length,
+    });
     return {
       products,
       pagination: {

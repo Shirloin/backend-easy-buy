@@ -1,5 +1,6 @@
 import { IProductCategory } from "../interfaces/product-category.interface";
 import ProductCategory from "../models/product-category.model";
+import logger from "../utils/logger";
 
 export default class ProductCategoryRepository {
     static instance: ProductCategoryRepository
@@ -22,14 +23,26 @@ export default class ProductCategoryRepository {
         return await this.productCategory.findOne({ name: category })
     }
     public async createProductCategory(name: string) {
-        return await this.productCategory.create({
+        logger.info("ProductCategoryRepository.createProductCategory - Creating product category", { name });
+        const category = await this.productCategory.create({
             name: name,
         });
+        logger.info("ProductCategoryRepository.createProductCategory - Product category created successfully", {
+            categoryId: category._id,
+            name,
+        });
+        return category
     }
     public async deleteProductFromCategory(productId: string) {
-        return await this.productCategory.updateMany(
+        logger.info("ProductCategoryRepository.deleteProductFromCategory - Removing product from category", { productId });
+        const result = await this.productCategory.updateMany(
             { products: productId },
             { $pull: { products: productId } }
         );
+        logger.info("ProductCategoryRepository.deleteProductFromCategory - Product removed from categories", {
+            productId,
+            modified: result.modifiedCount,
+        });
+        return result
     }
 }

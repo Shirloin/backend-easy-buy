@@ -4,6 +4,7 @@ import Cart from "../models/cart.model"
 import UserRepository from "./user.repository"
 import User from "../models/user.model"
 import { ICartItem } from "../interfaces/cart-item.interface"
+import logger from "../utils/logger"
 
 export default class CartRepository {
     static instance: CartRepository
@@ -74,18 +75,34 @@ export default class CartRepository {
     }
 
     public async createCart(userId: string, shopId: string, itemId: string) {
-        return await this.cart.create({
+        logger.info("CartRepository.createCart - Creating cart", {
+            userId,
+            shopId,
+        });
+        const newCart = await this.cart.create({
             user: userId,
             shop: shopId,
             items: [itemId],
         });
+        logger.info("CartRepository.createCart - Cart created successfully", {
+            cartId: newCart._id,
+        });
+        return newCart;
     }
 
     public async createCartItem(variantId: string, quantity: number) {
-        return await this.cartItem.create({
+        logger.info("CartRepository.createCartItem - Creating cart item", {
+            variantId,
+            quantity,
+        });
+        const newCartItem = await this.cartItem.create({
             quantity: quantity,
             variant: variantId,
         });
+        logger.info("CartRepository.createCartItem - Cart item created successfully", {
+            cartItemId: newCartItem._id,
+        });
+        return newCartItem;
     }
     public async getCartItemByCartAndVariant(cartItem: ICartItem[], variantId: string) {
         return await this.cartItem.findOne({ variant: variantId, _id: { $in: cartItem } },)
@@ -156,14 +173,20 @@ export default class CartRepository {
     }
 
     public async deleteCartItem(cartItemId: string) {
+        logger.info("CartRepository.deleteCartItem - Deleting cart item", { cartItemId });
         const cartItem = await this.cartItem.deleteOne({ _id: cartItemId })
         if (cartItem.deletedCount === 0) {
+            logger.warn("CartRepository.deleteCartItem - Cart item not found", { cartItemId });
             return null
         }
         const cart = await this.cart.updateMany(
             { items: cartItemId },
             { $pull: { items: cartItemId } }
         );
+        logger.info("CartRepository.deleteCartItem - Cart item deleted successfully", {
+            cartItemId,
+            updatedCarts: cart.modifiedCount,
+        });
         return cart
     }
 

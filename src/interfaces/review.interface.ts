@@ -4,6 +4,7 @@ import ITransactionDetail from "./transaction-detail.interface"
 import { IUser } from "./user.interface"
 
 export interface IReview {
+    _id: string
     rating: number
     text: string
     product: IProduct

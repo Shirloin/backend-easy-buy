@@ -1,14 +1,12 @@
 services:
-  api:
-    image: riccardo006/backend-easy-buy:latest
+  easy-buy-backend:
+    image: crpi-pnda4wyku982ifaa.ap-southeast-5.personal.cr.aliyuncs.com/shirloin/easy-buy-backend:latest
     build:
       context: .
       dockerfile: Dockerfile.prod
     container_name: easy-buy-backend
     ports:
       - "6543:6543"
-    networks:
-      - shared-network
     environment:
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
@@ -20,10 +18,3 @@ services:
       - SECRET_KEY=${SECRET_KEY}
       - ORIGIN=${ORIGIN}
       - CREDENTIALS=${CREDENTIALS}
-
-networks:
-  shared-network:
-    external: true
-
-volumes:
-  mongo-data:
