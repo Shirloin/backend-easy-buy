@@ -18,3 +18,4 @@ services:
       - SECRET_KEY=${SECRET_KEY}
       - ORIGIN=${ORIGIN}
       - CREDENTIALS=${CREDENTIALS}
+      - LOG_LEVEL=${LOG_LEVEL}
